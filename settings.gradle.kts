@@ -5,9 +5,6 @@ rootProject.name = "kotlin-analysis"
 include(
     "kotlin-analysis-core",
     "kotlin-analysis-plugin",
-    "kotlin-analysis-clones",
-    "kotlin-analysis-dependencies",
-    "kotlin-analysis-statistic",
     "kotlin-slicing"
 )
 

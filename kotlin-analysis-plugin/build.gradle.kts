@@ -38,9 +38,6 @@ open class KotlinAnalysisCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
 
 dependencies {
     implementation(project(":kotlin-analysis-core"))
-    implementation(project(":kotlin-analysis-clones"))
-    implementation(project(":kotlin-analysis-dependencies"))
-    implementation(project(":kotlin-analysis-statistic"))
     implementation(project(":kotlin-slicing"))
 //  TODO: psiminer dependency caused an error because of different versions of kotlin and intellij
 //    implementation("org.jetbrains.research.psiminer:psiminer") {

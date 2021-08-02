@@ -14,11 +14,11 @@ jobs:
         with:
           java-version: 11
 
-      - name: Install virtualenv
+      '''- name: Install virtualenv
         run: |
           sudo apt update
           sudo apt install python3-pip
-          python -m pip install virtualenv
+          python -m pip install virtualenv'''
           
       # Cache Gradle dependencies
       - name: Setup Gradle Dependencies Cache
@@ -57,7 +57,7 @@ jobs:
           name: test-report
           path: kotlin-analysis-*/build/reports/**
 
-  test:
+  ''' test:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -68,7 +68,7 @@ jobs:
           java-version: 11
       - uses: actions/checkout@v2
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew test '''
 
 
   code-style:
