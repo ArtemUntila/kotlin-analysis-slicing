@@ -1,0 +1,17 @@
+<idea-plugin>
+    <id>org.jetbrains.research.ml.kotlinAnalysis</id>
+    <name>Kotlin Analysis</name>
+    <vendor>JetBrains Research</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+    <depends>org.jetbrains.kotlin</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <appStarter implementation="org.jetbrains.research.ml.kotlinAnalysis.KotlinClonesAnalysisRunner"/>
+        <appStarter implementation="org.jetbrains.research.ml.kotlinAnalysis.KotlinDependenciesAnalysisRunner"/>
+        <appStarter implementation="org.jetbrains.research.ml.kotlinAnalysis.KotlinRangesAnalysisRunner"/>
+        <appStarter implementation="org.jetbrains.research.ml.kotlinAnalysis.KotlinSlicerRunner"/>
+    </extensions>
+
+</idea-plugin>
