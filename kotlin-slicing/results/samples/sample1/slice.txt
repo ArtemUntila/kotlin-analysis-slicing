@@ -1,0 +1,42 @@
+{Main=[4, 6, 11, 7]}
+
+4=var a = intArrayOf(0, 1)
+6=add(a)
+7=println(a.contentToString())
+11=a[0] += 1
+
+PSI FILE NAME = main.kt:
+package scripts
+
+fun main() {
+    var a = intArrayOf(0, 1)
+    // a = addAndReturn(a)
+    add(a)
+    println(a.contentToString())
+}
+
+fun add(a: IntArray) {
+    a[0] += 1
+}
+
+fun addAndReturn(a: IntArray): IntArray {
+    a[0] += 1
+    return a
+}
+
+
+psiElementsToDelete =  [FUN]
+
+Slice:
+package scripts
+
+fun main() {
+    var a = intArrayOf(0, 1)
+    // a = addAndReturn(a)
+    add(a)
+    println(a.contentToString())
+}
+
+fun add(a: IntArray) {
+    a[0] += 1
+}

@@ -11,7 +11,7 @@
         <appStarter implementation="org.jetbrains.research.ml.kotlinAnalysis.KotlinClonesAnalysisRunner"/>
         <appStarter implementation="org.jetbrains.research.ml.kotlinAnalysis.KotlinDependenciesAnalysisRunner"/>
         <appStarter implementation="org.jetbrains.research.ml.kotlinAnalysis.KotlinRangesAnalysisRunner"/>
-        <appStarter implementation="org.jetbrains.research.ml.kotlinAnalysis.KotlinSlicerRunner"/>
+        <appStarter implementation="org.jetbrains.research.ml.kotlinAnalysis.KotlinSlicingRunner"/>
     </extensions>
 
 </idea-plugin>
