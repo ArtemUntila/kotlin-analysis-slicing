@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.kotlinAnalysis
+package org.jetbrains.research.ml.kotlinAnalysis.util
 
 import java.io.File
 
@@ -9,21 +9,17 @@ fun parse(path: String): MutableMap<String, MutableList<Int>> {
         val klass = ktClassToFileName(pair[0])
         val lineNumber = pair[1].toInt()
         if (lineNumber > 0) {
-            if (slices.containsKey(klass)) {
-                slices[klass]!!.add(lineNumber)
-            } else {
-                slices[klass] = mutableListOf(lineNumber)
-            }
+            slices.getOrPut(klass) { mutableListOf() }.add(lineNumber)
         }
     }
     return slices
 }
 
-fun unpackSlices(lineNumbers: MutableList<Int>, lines: List<String>): MutableMap<Int, String> {
+fun unpackSlices(lineNumbers: List<Int>, lines: List<String>): MutableMap<Int, String> { // unnecessary
     val result = mutableMapOf<Int, String>()
     for (i in lines.indices) {
         if (lineNumbers.contains(i + 1)) {
-            result[i + 1] = lines[i].trim() // will be removed
+            result[i + 1] = lines[i].trim() // ".trim()" will be removed
         }
     }
     return result
