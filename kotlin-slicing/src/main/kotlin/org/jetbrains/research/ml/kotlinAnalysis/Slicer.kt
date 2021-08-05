@@ -17,11 +17,11 @@ class Slicer(private val outputDir: Path, private val slice: Path) : AnalysisExe
         val psiFiles: MutableSet<PsiFile> = PsiProvider.extractPsiFiles(project)
         if (psiFiles.isEmpty()) return
 
-        val infoWriter = infoResourceManager.writer
         // TODO: Accept path to slice.log as an input. UDP: DONE
         val map = parse(slice) // main.kt -> MainKt
 
         // TODO: Remove debug prints
+        val infoWriter = infoResourceManager.writer
         infoWriter.println("map: $map\n") // DEBUG
 
         val documentManager = PsiDocumentManager.getInstance(project)
@@ -31,7 +31,7 @@ class Slicer(private val outputDir: Path, private val slice: Path) : AnalysisExe
             val lineNumbers = map[keyName] ?: continue
             val lines = unpackSlices(lineNumbers, psiFile.text.lines())
             val document = documentManager.getDocument(psiFile)!!
-            infoWriter.println("keyName:\n${lines.entries.joinToString("\n")}\n") // DEBUG
+            infoWriter.println("$keyName:\n${lines.entries.joinToString("\n")}\n") // DEBUG
             SliceFormatter(psiFile, lineNumbers, document, outputDir).execute()
         }
     }

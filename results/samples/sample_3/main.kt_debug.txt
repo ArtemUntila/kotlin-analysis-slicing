@@ -20,6 +20,10 @@ fun main() {
     var a = intArrayOf(0, 1)
     a = addAndReturn(a)
     add(a)
+    val b = 2
+    a[1] += b
+    val s = "AAA"
+    println(s)
     println(a.contentToString())
 }
 
@@ -59,7 +63,7 @@ ADD: ALWAYS_RETAINED_PSI_ELEMENT
 i = 6    rawName = CALL_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
 add(a)
 
-SKIP
+ADD: SLICE_ELEMENT
 
 i = 6    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
 
@@ -67,32 +71,62 @@ i = 6    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.t
 
 ADD: ALWAYS_RETAINED_PSI_ELEMENT
 
-i = 7    rawName = CALL_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+i = 7    rawName = PROPERTY    class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val b = 2
+
+SKIP
+
+i = 7    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+    
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+i = 8    rawName = BINARY_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+a[1] += b
+
+ADD: SLICE_ELEMENT
+
+i = 8    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+    
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+i = 9    rawName = PROPERTY    class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val s = "AAA"
+
+SKIP
+
+i = 9    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+    
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+i = 10    rawName = CALL_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+println(s)
+
+SKIP
+
+i = 10    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+    
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+i = 11    rawName = CALL_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
 println(a.contentToString())
 
 ADD: SLICE_ELEMENT
 
-i = 7    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+i = 11    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
 
 
 
 ADD: ALWAYS_RETAINED_PSI_ELEMENT
 
-i = 8    rawName = PsiElement(RBRACE)    class = class com.intellij.psi.impl.source.tree.LeafPsiElement (Kotlin reflection is not available)    text:
-}
-
-SKIP
-
-i = 8    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
-
-
-
-
-ADD: ALWAYS_RETAINED_PSI_ELEMENT
-
-i = 10    rawName = FUN    class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
-fun add(a: IntArray) {
-    a[0] += 1
+i = 12    rawName = PsiElement(RBRACE)    class = class com.intellij.psi.impl.source.tree.LeafPsiElement (Kotlin reflection is not available)    text:
 }
 
 SKIP
@@ -105,9 +139,8 @@ i = 12    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.
 ADD: ALWAYS_RETAINED_PSI_ELEMENT
 
 i = 14    rawName = FUN    class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
-fun addAndReturn(a: IntArray): IntArray {
+fun add(a: IntArray) {
     a[0] += 1
-    return a
 }
 
 i = 14    rawName = PsiElement(LBRACE)    class = class com.intellij.psi.impl.source.tree.LeafPsiElement (Kotlin reflection is not available)    text:
@@ -128,11 +161,51 @@ ADD: SLICE_ELEMENT
 
 i = 15    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
 
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+i = 16    rawName = PsiElement(RBRACE)    class = class com.intellij.psi.impl.source.tree.LeafPsiElement (Kotlin reflection is not available)    text:
+}
+
+SKIP
+
+i = 16    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+i = 18    rawName = FUN    class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun addAndReturn(a: IntArray): IntArray {
+    a[0] += 1
+    return a
+}
+
+i = 18    rawName = PsiElement(LBRACE)    class = class com.intellij.psi.impl.source.tree.LeafPsiElement (Kotlin reflection is not available)    text:
+{
+
+SKIP
+
+i = 18    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
     
 
 ADD: ALWAYS_RETAINED_PSI_ELEMENT
 
-i = 16    rawName = RETURN    class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+i = 19    rawName = BINARY_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+a[0] += 1
+
+ADD: SLICE_ELEMENT
+
+i = 19    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+    
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+i = 20    rawName = RETURN    class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
 return a
 
 ADD: SLICE_ELEMENT
@@ -156,6 +229,10 @@ FUN:
     var a = intArrayOf(0, 1)
     a = addAndReturn(a)
     add(a)
+    val b = 2
+    a[1] += b
+    val s = "AAA"
+    println(s)
     println(a.contentToString())
 }
 
@@ -183,6 +260,28 @@ PsiWhiteSpace:
  
     
 
+CALL_EXPRESSION:
+ add(a)
+
+PsiWhiteSpace:
+ 
+    
+
+PsiWhiteSpace:
+ 
+    
+
+BINARY_EXPRESSION:
+ a[1] += b
+
+PsiWhiteSpace:
+ 
+    
+
+PsiWhiteSpace:
+ 
+    
+
 PsiWhiteSpace:
  
     
@@ -197,6 +296,28 @@ PsiWhiteSpace:
 PsiWhiteSpace:
  
 
+
+
+FUN:
+ fun add(a: IntArray) {
+    a[0] += 1
+}
+
+PsiElement(LBRACE):
+ {
+
+PsiElement(RBRACE):
+ }
+
+PsiWhiteSpace:
+ 
+    
+
+BINARY_EXPRESSION:
+ a[0] += 1
+
+PsiWhiteSpace:
+ 
 
 
 PsiWhiteSpace:
@@ -255,6 +376,10 @@ fun main() {
     var a = intArrayOf(0, 1)
     a = addAndReturn(a)
     add(a)
+    val b = 2
+    a[1] += b
+    val s = "AAA"
+    println(s)
     println(a.contentToString())
 }
 
@@ -294,6 +419,38 @@ SKIP
 rawName = CALL_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
 add(a)
 
+SKIP
+
+rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+    
+
+SKIP
+
+rawName = PROPERTY    class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val b = 2
+
+DELETE
+
+rawName = BINARY_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+a[1] += b
+
+SKIP
+
+rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+    
+
+SKIP
+
+rawName = PROPERTY    class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val s = "AAA"
+
+DELETE
+
+rawName = CALL_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+println(s)
+
 DELETE
 
 rawName = CALL_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
@@ -324,7 +481,39 @@ fun add(a: IntArray) {
     a[0] += 1
 }
 
-DELETE
+rawName = PsiElement(LBRACE)    class = class com.intellij.psi.impl.source.tree.LeafPsiElement (Kotlin reflection is not available)    text:
+{
+
+SKIP
+
+rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+    
+
+SKIP
+
+rawName = BINARY_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+a[0] += 1
+
+SKIP
+
+rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+
+
+SKIP
+
+rawName = PsiElement(RBRACE)    class = class com.intellij.psi.impl.source.tree.LeafPsiElement (Kotlin reflection is not available)    text:
+}
+
+SKIP
+
+rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
+
+
+
+
+SKIP
 
 rawName = FUN    class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
 fun addAndReturn(a: IntArray): IntArray {

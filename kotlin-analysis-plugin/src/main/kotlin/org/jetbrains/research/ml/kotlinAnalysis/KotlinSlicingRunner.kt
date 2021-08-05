@@ -1,7 +1,5 @@
 package org.jetbrains.research.ml.kotlinAnalysis
 
-import org.jetbrains.research.ml.kotlinAnalysis.util.SlicingRunnerArgs
-import org.jetbrains.research.ml.kotlinAnalysis.util.SlicingRunnerArgsParser
 import org.jetbrains.research.pluginUtilities.runners.BaseRunner
 
 object KotlinSlicingRunner : BaseRunner<SlicingRunnerArgs, SlicingRunnerArgsParser>

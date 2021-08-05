@@ -1,6 +1,6 @@
 map: {Main=[4, 5, 15, 16, 7]}
 
-keyName:
+Main:
 4=    var a = intArrayOf(0, 1)
 5=    a = addAndReturn(a)
 7=    println(a.contentToString())
