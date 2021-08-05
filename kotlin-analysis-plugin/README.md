@@ -1,13 +1,14 @@
 # Kotlin-Analysis plugin
 
-The plugin to run various project analysis from the CLI:
-* ```kotlin-clones-analysis``` - command process code clones analysis 
-* ```kotlin-dependencies-analysis``` - command process project dependencies and imports analysis
+The plugin to run project analysis from the CLI:
+* ```kotlin-slicing``` - command process slicing
 
 ### Usage
 
 To run analysis execute task 'cli' with analysis runner name and args:
 
 ``` 
-gradle :kotlin-analysis-plugin:cli -Prunner="kotlin-object-analysis" -Pinput="path/to/dir/with/projects" -Poutput="path/to/dir/with/results"
+gradle :kotlin-analysis-plugin:cli -Prunner="kotlin-slicing" -Pinput="path/to/dir/with/projects" -Poutput="path/to/dir/with/results"
 ```
+
+Origin: https://github.com/JetBrains-Research/Kotlin-Analysis/tree/main/kotlin-analysis-plugin
