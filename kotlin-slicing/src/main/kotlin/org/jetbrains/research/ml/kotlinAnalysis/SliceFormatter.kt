@@ -7,14 +7,19 @@ import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import java.io.PrintWriter
+import org.jetbrains.research.ml.kotlinAnalysis.util.getPrintWriter
+import java.nio.file.Path
 
 class SliceFormatter(private val psiFile: PsiFile,
-                     private val lineNumbers: MutableList<Int>,
-                     private val writer: PrintWriter,
-                     private val document: Document) {
+                     private val lineNumbers: MutableSet<Int>,
+                     private val document: Document,
+                     private val outputDir: Path) {
 
-    private val slice = mutableSetOf<PsiElement>()
+    private val sliceElements = mutableSetOf<PsiElement>()
+
+    private val name = psiFile.name
+
+    private val debugWriter = getPrintWriter(outputDir, "${name}_debug.txt")
 
     companion object {
         val ALWAYS_RETAINED_PSI_ELEMENTS = setOf(
@@ -27,20 +32,24 @@ class SliceFormatter(private val psiFile: PsiFile,
     }
 
     fun execute() {
-        psiFile.acceptChildren(SlicingVisitor()) // including elements from slice
-        writer.println("\n==========SLICED ELEMENTS==========\n") // DEBUG
-        slice.forEach { writer.println("$it:\n ${it.text}\n") } // DEBUG
+        psiFile.acceptChildren(SlicingVisitor()) // including elements from sliceElements
+        debugWriter.println("\n==========SLICE ELEMENTS==========\n")
+        sliceElements.forEach { debugWriter.println("$it:\n ${it.text}\n") }
 
         CommandProcessor.getInstance().executeCommand(
             null, { psiFile.acceptChildren(FormatterVisitor()) }, null, null
         )
-        writer.println("\n==========RESULT SLICE==========\n${psiFile.text}")
+        val sliceWriter = getPrintWriter(outputDir, name)
+        sliceWriter.println(psiFile.text)
+
+        debugWriter.flush()
+        sliceWriter.flush()
     }
 
 //    private fun start(psiFile: PsiFile) { // check PsiVisitor -- udp: works wonderful -- thanks Marat
-//        psiFile.acceptChildren(SlicingVisitor()) // including elements from slice
-//        writer.println("\n==========SLICED ELEMENTS==========\n")
-//        slice.forEach { writer.println("$it:\n ${it.text}\n") }
+//        psiFile.acceptChildren(SlicingVisitor()) // including elements from sliceElements
+//        debugWriter.println("\n==========SLICED ELEMENTS==========\n")
+//        sliceElements.forEach { debugWriter.println("$it:\n ${it.text}\n") }
 //    }
 
     // VISITORS:
@@ -50,30 +59,28 @@ class SliceFormatter(private val psiFile: PsiFile,
 
             val lineNumber = getLineNumber(element)
 
-            writer.println(
+            debugWriter.println(
                 "i = $lineNumber    rawName = $element    class = ${element::class}    text:\n${element.text}"
             )
 
             when {
                 lineNumber in lineNumbers -> {
-                    slice.add(element)
+                    sliceElements.add(element)
                     lineNumbers.remove(lineNumber)
-                    // element.accept(IncludeVisitor())
-                    // includeParents(element)
-                    writer.println("ADDED: SLICE_ELEMENT\n")
+                    debugWriter.println("ADDED: SLICE_ELEMENT\n")
                 }
                 isAlwaysRetained(element) -> {
-                    // element.accept(IncludeVisitor())
-                    slice.add(element)
-                    writer.println("ADDED: ALWAYS_RETAINED_PSI_ELEMENT\n")
+                    sliceElements.add(element)
+                    debugWriter.println("ADDED: ALWAYS_RETAINED_PSI_ELEMENT\n")
                 }
                 else -> {
                     if (checkContainer(element, lineNumber)) { // visit CONTAINERS if any of lineNumber is in its range
                         val block = getBlock(element)
-                        slice.addAll(listOf(element, block.firstChild, block.lastChild)) // adding braces {}
+                        // adding container & braces {}
+                        sliceElements.addAll(listOf(element, block.firstChild, block.lastChild))
                         block.acceptChildren(this)
                     } else {
-                        writer.println("SKIPPED\n")
+                        debugWriter.println("SKIPPED\n")
                     }
                 }
             }
@@ -82,16 +89,16 @@ class SliceFormatter(private val psiFile: PsiFile,
 
     private inner class FormatterVisitor : PsiRecursiveElementVisitor() {
         override fun visitElement(element: PsiElement) {
-            writer.println("rawName = $element    class = ${element::class}    text:\n${element.text}")
+            debugWriter.println("rawName = $element    class = ${element::class}    text:\n${element.text}")
             when {
-                element in slice -> {
+                element in sliceElements -> {
                     if (isContainer(element)) {
                         getBlock(element).acceptChildren(this)
                     }
                 }
                 isAlwaysRetained(element) -> super.visitElement(element)
                 else -> {
-                    writer.println("DELETING")
+                    debugWriter.println("DELETING")
                     element.delete()
                 }
             }
@@ -126,7 +133,7 @@ class SliceFormatter(private val psiFile: PsiFile,
 
 //    private inner class IncludeVisitor : PsiRecursiveElementVisitor() {
 //        override fun visitElement(element: PsiElement) {
-//            slice.add(element)
+//            sliceElements.add(element)
 //            if (element.toString() == "BLOCK") {
 //                return
 //            }
@@ -136,8 +143,8 @@ class SliceFormatter(private val psiFile: PsiFile,
 
 //    private fun includeParents(element: PsiElement) {
 //        var parent = element.parent
-//        while (!slice.contains(parent)) {
-//            slice.add(parent)
+//        while (!sliceElements.contains(parent)) {
+//            sliceElements.add(parent)
 //            if (parent::class in CONTAINERS) { // instead of do{}while
 //                break
 //            } else {

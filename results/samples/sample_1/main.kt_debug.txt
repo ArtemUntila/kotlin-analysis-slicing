@@ -1,11 +1,3 @@
-map: {Main=[4, 5, 15, 16, 7]}
-
-4=var a = intArrayOf(0, 1)
-5=a = addAndReturn(a)
-7=println(a.contentToString())
-15=a[0] += 1
-16=return a
-
 i = 1    rawName = PACKAGE_DIRECTIVE    class = class org.jetbrains.kotlin.psi.KtPackageDirective (Kotlin reflection is not available)    text:
 package scripts
 ADDED: ALWAYS_RETAINED_PSI_ELEMENT
@@ -24,7 +16,7 @@ i = 3    rawName = FUN    class = class org.jetbrains.kotlin.psi.KtNamedFunction
 fun main() {
     var a = intArrayOf(0, 1)
     a = addAndReturn(a)
-    // add(a)
+    add(a)
     println(a.contentToString())
 }
 i = 3    rawName = PsiElement(LBRACE)    class = class com.intellij.psi.impl.source.tree.LeafPsiElement (Kotlin reflection is not available)    text:
@@ -54,8 +46,8 @@ i = 5    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.t
     
 ADDED: ALWAYS_RETAINED_PSI_ELEMENT
 
-i = 6    rawName = PsiComment(EOL_COMMENT)    class = class com.intellij.psi.impl.source.tree.PsiCommentImpl (Kotlin reflection is not available)    text:
-// add(a)
+i = 6    rawName = CALL_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+add(a)
 SKIPPED
 
 i = 6    rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
@@ -122,7 +114,7 @@ return a
 ADDED: SLICE_ELEMENT
 
 
-==========SLICED ELEMENTS==========
+==========SLICE ELEMENTS==========
 
 PACKAGE_DIRECTIVE:
  package scripts
@@ -139,7 +131,7 @@ FUN:
  fun main() {
     var a = intArrayOf(0, 1)
     a = addAndReturn(a)
-    // add(a)
+    add(a)
     println(a.contentToString())
 }
 
@@ -226,7 +218,7 @@ rawName = FUN    class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin 
 fun main() {
     var a = intArrayOf(0, 1)
     a = addAndReturn(a)
-    // add(a)
+    add(a)
     println(a.contentToString())
 }
 rawName = PsiElement(LBRACE)    class = class com.intellij.psi.impl.source.tree.LeafPsiElement (Kotlin reflection is not available)    text:
@@ -244,8 +236,8 @@ a = addAndReturn(a)
 rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
 
     
-rawName = PsiComment(EOL_COMMENT)    class = class com.intellij.psi.impl.source.tree.PsiCommentImpl (Kotlin reflection is not available)    text:
-// add(a)
+rawName = CALL_EXPRESSION    class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+add(a)
 DELETING
 rawName = PsiWhiteSpace    class = class com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl (Kotlin reflection is not available)    text:
 
@@ -256,17 +248,3 @@ fun add(a: IntArray) {
     a[0] += 1
 }
 DELETING
-
-==========RESULT SLICE==========
-package scripts
-
-fun main() {
-    var a = intArrayOf(0, 1)
-    a = addAndReturn(a)
-    println(a.contentToString())
-}
-
-fun addAndReturn(a: IntArray): IntArray {
-    a[0] += 1
-    return a
-}

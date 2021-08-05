@@ -1,0 +1,8 @@
+map: {Main=[4, 6, 11, 7]}
+
+keyName:
+4=    var a = intArrayOf(0, 1)
+6=    add(a)
+7=    println(a.contentToString())
+11=    a[0] += 1
+

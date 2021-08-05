@@ -7,23 +7,22 @@ import org.jetbrains.research.ml.kotlinAnalysis.psi.PsiProvider
 import org.jetbrains.research.ml.kotlinAnalysis.util.*
 import java.nio.file.Path
 
-class Slicer(outputDir: Path) : AnalysisExecutor() {
+class Slicer(private val outputDir: Path, private val slice: Path) : AnalysisExecutor() {
 
-    // TODO: Add debugWriter?
-    private val dataWriter = PrintWriterResourceManager(outputDir, "slice.txt")
-    override val controlledResourceManagers: Set<ResourceManager> = setOf(dataWriter)
+    // TODO: Add debugWriter? UPD: DONE
+    private val infoResourceManager = PrintWriterResourceManager(outputDir, "slicing_info.txt")
+    override val controlledResourceManagers = mutableSetOf<ResourceManager>(infoResourceManager)
 
     override fun analyse(project: Project) { // initializes dataWriter.writer !!!
         val psiFiles: MutableSet<PsiFile> = PsiProvider.extractPsiFiles(project)
         if (psiFiles.isEmpty()) return
 
-        // TODO: Accept path to slice.log as an input
-        val map = parse(
-            "/home/artyom/IdeaProjects/Kotlin-Analysis/kotlin-slicing/results/samples/sample1/slice.log"
-        ) // main.kt -> MainKt
+        val infoWriter = infoResourceManager.writer
+        // TODO: Accept path to slice.log as an input. UDP: DONE
+        val map = parse(slice) // main.kt -> MainKt
 
         // TODO: Remove debug prints
-        dataWriter.writer.println("map: $map\n") // DEBUG
+        infoWriter.println("map: $map\n") // DEBUG
 
         val documentManager = PsiDocumentManager.getInstance(project)
 
@@ -31,8 +30,9 @@ class Slicer(outputDir: Path) : AnalysisExecutor() {
             val keyName = toKey(psiFile.name)
             val lineNumbers = map[keyName] ?: continue
             val lines = unpackSlices(lineNumbers, psiFile.text.lines())
-            dataWriter.writer.println("${lines.entries.joinToString("\n")}\n") // DEBUG
-            SliceFormatter(psiFile, lineNumbers, dataWriter.writer, documentManager.getDocument(psiFile)!!).execute()
+            val document = documentManager.getDocument(psiFile)!!
+            infoWriter.println("keyName:\n${lines.entries.joinToString("\n")}\n") // DEBUG
+            SliceFormatter(psiFile, lineNumbers, document, outputDir).execute()
         }
     }
 
