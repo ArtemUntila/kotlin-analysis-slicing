@@ -1,0 +1,433 @@
+PACKAGE_DIRECTIVE: i = 1   class = class org.jetbrains.kotlin.psi.KtPackageDirective (Kotlin reflection is not available)    text:
+package scripts
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+IMPORT_LIST: i = 3   class = class org.jetbrains.kotlin.psi.KtImportList (Kotlin reflection is not available)    text:
+import java.util.*
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+CLASS: i = 5   class = class org.jetbrains.kotlin.psi.KtClass (Kotlin reflection is not available)    text:
+class TestClass {
+
+    fun main() {
+        val v = Scanner(System.`in`).nextInt()
+
+        val out1: String
+        if (v == 0) {
+            out1 = "zero"
+        } else if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+        val out2: String
+        when {
+            v == 0 -> {
+                out2 = "zero"
+            }
+            v % 2 == 0 -> {
+                out2 = "even"
+            }
+            else -> {
+                out2 = "not even"
+            }
+        }
+
+        var i = 0
+        while (i < 10) {
+            i++
+            println(i)
+        }
+
+        var j = 0
+        for (k in 0..9) {
+            j++
+            println(j)
+        }
+    }
+}
+
+ADD: CONTAINER
+
+FUN: i = 7   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun main() {
+        val v = Scanner(System.`in`).nextInt()
+
+        val out1: String
+        if (v == 0) {
+            out1 = "zero"
+        } else if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+        val out2: String
+        when {
+            v == 0 -> {
+                out2 = "zero"
+            }
+            v % 2 == 0 -> {
+                out2 = "even"
+            }
+            else -> {
+                out2 = "not even"
+            }
+        }
+
+        var i = 0
+        while (i < 10) {
+            i++
+            println(i)
+        }
+
+        var j = 0
+        for (k in 0..9) {
+            j++
+            println(j)
+        }
+    }
+
+ADD: CONTAINER
+
+PROPERTY: i = 8   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val v = Scanner(System.`in`).nextInt()
+
+SKIP
+
+PROPERTY: i = 10   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val out1: String
+
+SKIP
+
+IF: i = 11   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (v == 0) {
+            out1 = "zero"
+        } else if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 12   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+out1 = "zero"
+
+SKIP
+
+IF: i = 13   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 14   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+out1 = "even"
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 19   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val out2: String
+
+SKIP
+
+WHEN: i = 20   class = class org.jetbrains.kotlin.psi.KtWhenExpression (Kotlin reflection is not available)    text:
+when {
+            v == 0 -> {
+                out2 = "zero"
+            }
+            v % 2 == 0 -> {
+                out2 = "even"
+            }
+            else -> {
+                out2 = "not even"
+            }
+        }
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 25   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+out2 = "even"
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 32   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+var i = 0
+
+SKIP
+
+WHILE: i = 33   class = class org.jetbrains.kotlin.psi.KtWhileExpression (Kotlin reflection is not available)    text:
+while (i < 10) {
+            i++
+            println(i)
+        }
+
+ADD: SLICE_ELEMENT
+
+POSTFIX_EXPRESSION: i = 34   class = class org.jetbrains.kotlin.psi.KtPostfixExpression (Kotlin reflection is not available)    text:
+i++
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 35   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+println(i)
+
+SKIP
+
+PROPERTY: i = 38   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+var j = 0
+
+SKIP
+
+FOR: i = 39   class = class org.jetbrains.kotlin.psi.KtForExpression (Kotlin reflection is not available)    text:
+for (k in 0..9) {
+            j++
+            println(j)
+        }
+
+ADD: SLICE_ELEMENT
+
+POSTFIX_EXPRESSION: i = 40   class = class org.jetbrains.kotlin.psi.KtPostfixExpression (Kotlin reflection is not available)    text:
+j++
+
+SKIP
+
+CALL_EXPRESSION: i = 41   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+println(j)
+
+ADD: SLICE_ELEMENT
+
+
+==========SLICE ELEMENTS==========
+
+PACKAGE_DIRECTIVE:
+ package scripts
+
+IMPORT_LIST:
+ import java.util.*
+
+CLASS:
+ class TestClass {
+
+    fun main() {
+        val v = Scanner(System.`in`).nextInt()
+
+        val out1: String
+        if (v == 0) {
+            out1 = "zero"
+        } else if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+        val out2: String
+        when {
+            v == 0 -> {
+                out2 = "zero"
+            }
+            v % 2 == 0 -> {
+                out2 = "even"
+            }
+            else -> {
+                out2 = "not even"
+            }
+        }
+
+        var i = 0
+        while (i < 10) {
+            i++
+            println(i)
+        }
+
+        var j = 0
+        for (k in 0..9) {
+            j++
+            println(j)
+        }
+    }
+}
+
+CLASS_BODY:
+ {
+
+    fun main() {
+        val v = Scanner(System.`in`).nextInt()
+
+        val out1: String
+        if (v == 0) {
+            out1 = "zero"
+        } else if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+        val out2: String
+        when {
+            v == 0 -> {
+                out2 = "zero"
+            }
+            v % 2 == 0 -> {
+                out2 = "even"
+            }
+            else -> {
+                out2 = "not even"
+            }
+        }
+
+        var i = 0
+        while (i < 10) {
+            i++
+            println(i)
+        }
+
+        var j = 0
+        for (k in 0..9) {
+            j++
+            println(j)
+        }
+    }
+}
+
+FUN:
+ fun main() {
+        val v = Scanner(System.`in`).nextInt()
+
+        val out1: String
+        if (v == 0) {
+            out1 = "zero"
+        } else if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+        val out2: String
+        when {
+            v == 0 -> {
+                out2 = "zero"
+            }
+            v % 2 == 0 -> {
+                out2 = "even"
+            }
+            else -> {
+                out2 = "not even"
+            }
+        }
+
+        var i = 0
+        while (i < 10) {
+            i++
+            println(i)
+        }
+
+        var j = 0
+        for (k in 0..9) {
+            j++
+            println(j)
+        }
+    }
+
+BLOCK:
+ {
+        val v = Scanner(System.`in`).nextInt()
+
+        val out1: String
+        if (v == 0) {
+            out1 = "zero"
+        } else if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+        val out2: String
+        when {
+            v == 0 -> {
+                out2 = "zero"
+            }
+            v % 2 == 0 -> {
+                out2 = "even"
+            }
+            else -> {
+                out2 = "not even"
+            }
+        }
+
+        var i = 0
+        while (i < 10) {
+            i++
+            println(i)
+        }
+
+        var j = 0
+        for (k in 0..9) {
+            j++
+            println(j)
+        }
+    }
+
+IF:
+ if (v == 0) {
+            out1 = "zero"
+        } else if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+IF:
+ if (v % 2 == 0) {
+            out1 = "even"
+        } else {
+            out1 = "not even"
+        }
+
+BINARY_EXPRESSION:
+ out1 = "even"
+
+WHEN:
+ when {
+            v == 0 -> {
+                out2 = "zero"
+            }
+            v % 2 == 0 -> {
+                out2 = "even"
+            }
+            else -> {
+                out2 = "not even"
+            }
+        }
+
+BINARY_EXPRESSION:
+ out2 = "even"
+
+WHILE:
+ while (i < 10) {
+            i++
+            println(i)
+        }
+
+POSTFIX_EXPRESSION:
+ i++
+
+FOR:
+ for (k in 0..9) {
+            j++
+            println(j)
+        }
+
+CALL_EXPRESSION:
+ println(j)
+
+
+==========FORMATTING==========
+

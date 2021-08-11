@@ -1,9 +1,13 @@
-map: {Main=[4, 5, 15, 16, 7]}
+map: {TestClass=[11, 13, 14, 20, 25, 33, 34, 39, 41]}
 
-Main:
-4=    var a = intArrayOf(0, 1)
-5=    a = addAndReturn(a)
-7=    println(a.contentToString())
-15=    a[0] += 1
-16=    return a
+TestClass:
+11=        if (v == 0) {
+13=        } else if (v % 2 == 0) {
+14=            out1 = "even"
+20=        when {
+25=                out2 = "even"
+33=        while (i < 10) {
+34=            i++
+39=        for (k in 0..9) {
+41=            println(j)
 

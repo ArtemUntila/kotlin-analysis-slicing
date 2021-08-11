@@ -2,9 +2,9 @@ package org.jetbrains.research.ml.kotlinAnalysis
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.PsiFile
 import org.jetbrains.research.ml.kotlinAnalysis.psi.PsiProvider
-import org.jetbrains.research.ml.kotlinAnalysis.util.*
+import org.jetbrains.research.ml.kotlinAnalysis.util.parse
+import org.jetbrains.research.ml.kotlinAnalysis.util.unpackSlices
 import java.nio.file.Path
 
 class Slicer(private val outputDir: Path, private val slice: Path) : AnalysisExecutor() {
@@ -14,10 +14,9 @@ class Slicer(private val outputDir: Path, private val slice: Path) : AnalysisExe
     override val controlledResourceManagers = mutableSetOf<ResourceManager>(infoResourceManager)
 
     override fun analyse(project: Project) { // initializes dataWriter.writer !!!
-        val psiFiles: MutableSet<PsiFile> = PsiProvider.extractPsiFiles(project)
+        val psiFiles = PsiProvider.extractPsiFiles(project) // TODO: Set<KtFile>
         if (psiFiles.isEmpty()) return
 
-        // TODO: Accept path to slice.log as an input. UDP: DONE
         val map = parse(slice) // main.kt -> MainKt
 
         // TODO: Remove debug prints
@@ -36,7 +35,7 @@ class Slicer(private val outputDir: Path, private val slice: Path) : AnalysisExe
         }
     }
 
-    // TODO: Research how to get the correct filename -> class/package name mapping
+    // TODO: Research how to get the correct filename -> class/package name mapping. UDP: WILL BE ADDED LATER
     private fun toKey(psiFileName: String) =
-        psiFileName.replace(".kt", "").replace(psiFileName[0], psiFileName[0].toUpperCase())
+        psiFileName.removeSuffix(".kt").replaceFirst(psiFileName[0], psiFileName[0].toUpperCase())
 }

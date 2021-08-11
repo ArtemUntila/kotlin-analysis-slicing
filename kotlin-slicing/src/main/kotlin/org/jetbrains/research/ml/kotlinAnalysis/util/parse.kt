@@ -26,12 +26,5 @@ fun unpackSlices(lineNumbers: Set<Int>, lines: List<String>): MutableMap<Int, St
     return result
 }
 
-fun ktClassToFileName(className: String): String {
-    // PsiFile.name doesn't contain package
-    val fileName = className.replace(Regex("""([\w]+\.)*"""), "")
-    return if (className.endsWith("Kt")) {
-        fileName.substring(0, fileName.length - 2)
-    } else {
-        fileName
-    }
-}
+fun ktClassToFileName(className: String) =
+    className.replace(Regex("""(\w+\.)*"""), "").removeSuffix("Kt")
