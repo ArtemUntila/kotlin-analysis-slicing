@@ -15,10 +15,7 @@ class TestClass {
             v % 2 == 0 -> {
                 out2 = "even"
             }
-            else -> {
-                out2 = "not even"
             }
-        }
 
         while (i < 10) {
             i++

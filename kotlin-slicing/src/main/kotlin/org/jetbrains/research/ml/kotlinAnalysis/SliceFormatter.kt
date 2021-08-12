@@ -57,21 +57,15 @@ class SliceFormatter(private val psiFile: PsiFile,
         }
 
         override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-            if (!analyzeElement(classOrObject)) return
+            if (analyzeElement(classOrObject)) classOrObject.body?.accept(this, null)
+        }
 
-            val body = classOrObject.body ?: return
-            sliceElements.add(classOrObject)
-            sliceElements.add(body)
-            super.visitKtElement(body)
+        override fun visitClassBody(classBody: KtClassBody) {
+            if (analyzeElement(classBody)) classBody.acceptChildren(this, null)
         }
 
         override fun visitNamedFunction(function: KtNamedFunction) {
-            if (!analyzeElement(function)) return
-
-            val body = function.bodyExpression ?: return
-            sliceElements.add(function)
-            sliceElements.add(body)
-            super.visitKtElement(body)
+            if (analyzeElement(function)) function.bodyExpression?.accept(this, null)
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
@@ -86,23 +80,15 @@ class SliceFormatter(private val psiFile: PsiFile,
         }
 
         override fun visitWhenExpression(expression: KtWhenExpression) {
-            if (!analyzeElement(expression)) return
-
-            for (entry in expression.entries) visitWhenEntry(entry)
+            if (analyzeElement(expression)) for (entry in expression.entries) visitWhenEntry(entry)
         }
 
         override fun visitWhenEntry(jetWhenEntry: KtWhenEntry) {
-            val analyzeResult = analyzeElement(jetWhenEntry)
-            when {
-                analyzeResult -> jetWhenEntry.expression?.accept(this, null)
-                !analyzeResult && jetWhenEntry.isElse -> elementsToDelete.remove(jetWhenEntry as PsiElement)
-            }
+            if (analyzeElement(jetWhenEntry)) jetWhenEntry.expression?.accept(this, null)
         }
 
         override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-            if (!analyzeElement(loopExpression)) return
-
-            loopExpression.body?.accept(this, null)
+            if (analyzeElement(loopExpression)) loopExpression.body?.accept(this, null)
         }
 
         override fun visitBlockExpression(expression: KtBlockExpression) {
@@ -116,6 +102,7 @@ class SliceFormatter(private val psiFile: PsiFile,
 
 //  TODO: PsiElement has a *range* of line numbers, not a single line number
 //  TODO: +- done, because KtElement ? declaration / assignment includes everything after "="
+//  TODO: UDP: DONE -> element.containsSliceElement()
     private fun analyzeElement(element: KtElement): Boolean {
         val startLineNumber = element.getStartLineNumber()
         printDebug(element, startLineNumber)
@@ -147,13 +134,13 @@ class SliceFormatter(private val psiFile: PsiFile,
             "$element: i = $startLineNumber   class = ${element::class}    text:\n${element.getDebugText()}\n"
         )
 
-    private fun KtElement.getStartLineNumber() = document.getLineNumber(this.pureStartOffset) + 1
-
-    private fun KtElement.getEndLineNumber() = document.getLineNumber(this.pureEndOffset) + 1
-
     private fun KtElement.containsSliceElement(): Boolean {
         val startLineNumber = this.getStartLineNumber()
         val endLineNumber = this.getEndLineNumber()
         return (startLineNumber..endLineNumber).any { it in lineNumbers }
     }
+
+    private fun KtElement.getStartLineNumber() = document.getLineNumber(this.pureStartOffset) + 1
+
+    private fun KtElement.getEndLineNumber() = document.getLineNumber(this.pureEndOffset) + 1
 }
