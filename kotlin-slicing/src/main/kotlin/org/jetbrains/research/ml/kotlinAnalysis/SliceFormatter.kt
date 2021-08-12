@@ -44,116 +44,109 @@ class SliceFormatter(private val psiFile: PsiFile,
 
     private inner class SlicingKtVisitor : KtTreeVisitorVoid() {
 
-//      TODO: PsiElement has a *range* of line numbers, not a single line number
-//      TODO: +- done, because KtElement ? declaration / assignment includes everything after "="
-        private fun analyzeElement(element: KtElement): Boolean {
-            val startLineNumber = element.getStartLineNumber()
-            printDebug(element, startLineNumber)
-
-            return when {
-                (startLineNumber in lineNumbers) -> {
-                    debugWriter.println("ADD: SLICE_ELEMENT\n")
-                    sliceElements.add(element)
-
-                    true
-                }
-                element.containsSliceElement() -> {
-                    debugWriter.println("ADD: CONTAINER\n")
-                    sliceElements.add(element)
-
-                    true
-                }
-                else -> {
-                    debugWriter.println("SKIP\n")
-                    elementsToDelete.add(element as PsiElement)
-
-                    false
-                }
-            }
+        override fun visitPackageDirective(directive: KtPackageDirective) {
+            printDebug(directive, directive.getStartLineNumber())
+            debugWriter.println("ADD: ALWAYS_RETAINED_PSI_ELEMENT\n")
+            sliceElements.add(directive)
         }
 
-        private fun printDebug(element: KtElement, startLineNumber: Int) =
-            debugWriter.println(
-                "$element: i = $startLineNumber   class = ${element::class}    text:\n${element.getDebugText()}\n"
-            )
-
-        override fun visitNamedFunction(function: KtNamedFunction) {
-            if (!analyzeElement(function)) return
-
-            if (function.containsSliceElement()) {
-                val body = function.bodyExpression ?: return
-                sliceElements.add(function)
-                sliceElements.add(body)
-                super.visitKtElement(body)
-            }
+        override fun visitImportList(importList: KtImportList) {
+            printDebug(importList, importList.getStartLineNumber())
+            debugWriter.println("ADD: ALWAYS_RETAINED_PSI_ELEMENT\n")
+            sliceElements.add(importList)
         }
 
         override fun visitClassOrObject(classOrObject: KtClassOrObject) {
             if (!analyzeElement(classOrObject)) return
 
-            if (classOrObject.containsSliceElement()) {
-                val body = classOrObject.body ?: return
-                sliceElements.add(classOrObject)
-                sliceElements.add(body)
-                super.visitKtElement(body)
-            }
+            val body = classOrObject.body ?: return
+            sliceElements.add(classOrObject)
+            sliceElements.add(body)
+            super.visitKtElement(body)
+        }
+
+        override fun visitNamedFunction(function: KtNamedFunction) {
+            if (!analyzeElement(function)) return
+
+            val body = function.bodyExpression ?: return
+            sliceElements.add(function)
+            sliceElements.add(body)
+            super.visitKtElement(body)
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
             if (!analyzeElement(expression)) return
 
             val then = expression.then
+            then?.accept(this, null)
+
             val els = expression.`else`
-            if (then != null) {
-                if (then.containsSliceElement()) {
-                    if (then is KtBlockExpression) super.visitKtElement(then)
-                    else if (then is KtIfExpression) visitIfExpression(then)
-                } else elementsToDelete.add(then as PsiElement)
-            }
-            if (els != null) {
-                if (els.containsSliceElement()) {
-                    if (els is KtBlockExpression) super.visitKtElement(els)
-                    else if (els is KtIfExpression) visitIfExpression(els)
-                } else {
-                    elementsToDelete.add(els as PsiElement)
-                    elementsToDelete.add(expression.elseKeyword!!) // everything is fine
-                }
+            els?.accept(this, null)
+            if ((els as PsiElement) in elementsToDelete) elementsToDelete.add(expression.elseKeyword!!)
+        }
+
+        override fun visitWhenExpression(expression: KtWhenExpression) {
+            if (!analyzeElement(expression)) return
+
+            for (entry in expression.entries) visitWhenEntry(entry)
+        }
+
+        override fun visitWhenEntry(jetWhenEntry: KtWhenEntry) {
+            val analyzeResult = analyzeElement(jetWhenEntry)
+            when {
+                analyzeResult -> jetWhenEntry.expression?.accept(this, null)
+                !analyzeResult && jetWhenEntry.isElse -> elementsToDelete.remove(jetWhenEntry as PsiElement)
             }
         }
 
         override fun visitLoopExpression(loopExpression: KtLoopExpression) {
             if (!analyzeElement(loopExpression)) return
 
-            val body = loopExpression.body ?: return
-            if (body is KtBlockExpression) super.visitKtElement(body) // no need to check a single expression
+            loopExpression.body?.accept(this, null)
         }
 
-        override fun visitWhenExpression(expression: KtWhenExpression) {
-            if (!analyzeElement(expression)) return
-
-            for (entry in expression.entries) {
-                if (entry.containsSliceElement()) { // "else" entry is necessary, therefore analyzeElement() isn't used
-                    val block = (entry as PsiElement).lastChild // Sequence<KtElement> is more complicated
-                    if (block is KtBlockExpression) super.visitKtElement(block) // no need to check a single expression
-                } else if (!entry.isElse) {
-                    elementsToDelete.add(entry as PsiElement)
-                }
-            }
+        override fun visitBlockExpression(expression: KtBlockExpression) {
+            if (analyzeElement(expression)) expression.acceptChildren(this, null)
         }
 
         override fun visitKtElement(element: KtElement) {
-            // More optimized than adding this condition in analyzeElement()
-            if (element is KtPackageDirective || element is KtImportList) {
-                printDebug(element, element.getStartLineNumber())
-                debugWriter.println("ADD: ALWAYS_RETAINED_PSI_ELEMENT\n")
+            analyzeElement(element) // ignore return type
+        }
+    }
+
+//  TODO: PsiElement has a *range* of line numbers, not a single line number
+//  TODO: +- done, because KtElement ? declaration / assignment includes everything after "="
+    private fun analyzeElement(element: KtElement): Boolean {
+        val startLineNumber = element.getStartLineNumber()
+        printDebug(element, startLineNumber)
+
+        return when {
+            (startLineNumber in lineNumbers) -> {
+                debugWriter.println("ADD: SLICE_ELEMENT\n")
                 sliceElements.add(element)
-            } else {
-                analyzeElement(element) // ignore return type
+
+                true
+            }
+            element.containsSliceElement() -> {
+                debugWriter.println("ADD: CONTAINER\n")
+                sliceElements.add(element)
+
+                true
+            }
+            else -> {
+                debugWriter.println("SKIP\n")
+                elementsToDelete.add(element as PsiElement)
+
+                false
             }
         }
     }
 
-    // TODO: Maybe it is better to do -1 in util.parse
+    private fun printDebug(element: KtElement, startLineNumber: Int) =
+        debugWriter.println(
+            "$element: i = $startLineNumber   class = ${element::class}    text:\n${element.getDebugText()}\n"
+        )
+
     private fun KtElement.getStartLineNumber() = document.getLineNumber(this.pureStartOffset) + 1
 
     private fun KtElement.getEndLineNumber() = document.getLineNumber(this.pureEndOffset) + 1

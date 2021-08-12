@@ -114,6 +114,13 @@ if (v == 0) {
 
 ADD: SLICE_ELEMENT
 
+BLOCK: i = 11   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+            out1 = "zero"
+        }
+
+ADD: SLICE_ELEMENT
+
 BINARY_EXPRESSION: i = 12   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
 out1 = "zero"
 
@@ -128,10 +135,24 @@ if (v % 2 == 0) {
 
 ADD: SLICE_ELEMENT
 
+BLOCK: i = 13   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+            out1 = "even"
+        }
+
+ADD: SLICE_ELEMENT
+
 BINARY_EXPRESSION: i = 14   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
 out1 = "even"
 
 ADD: SLICE_ELEMENT
+
+BLOCK: i = 15   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+            out1 = "not even"
+        }
+
+SKIP
 
 PROPERTY: i = 19   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
 val out2: String
@@ -153,10 +174,38 @@ when {
 
 ADD: SLICE_ELEMENT
 
+WHEN_ENTRY: i = 21   class = class org.jetbrains.kotlin.psi.KtWhenEntry (Kotlin reflection is not available)    text:
+v == 0 -> {
+                out2 = "zero"
+            }
+
+SKIP
+
+WHEN_ENTRY: i = 24   class = class org.jetbrains.kotlin.psi.KtWhenEntry (Kotlin reflection is not available)    text:
+v % 2 == 0 -> {
+                out2 = "even"
+            }
+
+ADD: CONTAINER
+
+BLOCK: i = 24   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+                out2 = "even"
+            }
+
+ADD: CONTAINER
+
 BINARY_EXPRESSION: i = 25   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
 out2 = "even"
 
 ADD: SLICE_ELEMENT
+
+WHEN_ENTRY: i = 27   class = class org.jetbrains.kotlin.psi.KtWhenEntry (Kotlin reflection is not available)    text:
+else -> {
+                out2 = "not even"
+            }
+
+SKIP
 
 PROPERTY: i = 32   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
 var i = 0
@@ -165,6 +214,14 @@ SKIP
 
 WHILE: i = 33   class = class org.jetbrains.kotlin.psi.KtWhileExpression (Kotlin reflection is not available)    text:
 while (i < 10) {
+            i++
+            println(i)
+        }
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 33   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
             i++
             println(i)
         }
@@ -188,6 +245,14 @@ SKIP
 
 FOR: i = 39   class = class org.jetbrains.kotlin.psi.KtForExpression (Kotlin reflection is not available)    text:
 for (k in 0..9) {
+            j++
+            println(j)
+        }
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 39   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
             j++
             println(j)
         }
@@ -384,11 +449,21 @@ IF:
             out1 = "not even"
         }
 
+BLOCK:
+ {
+            out1 = "zero"
+        }
+
 IF:
  if (v % 2 == 0) {
             out1 = "even"
         } else {
             out1 = "not even"
+        }
+
+BLOCK:
+ {
+            out1 = "even"
         }
 
 BINARY_EXPRESSION:
@@ -407,6 +482,16 @@ WHEN:
             }
         }
 
+WHEN_ENTRY:
+ v % 2 == 0 -> {
+                out2 = "even"
+            }
+
+BLOCK:
+ {
+                out2 = "even"
+            }
+
 BINARY_EXPRESSION:
  out2 = "even"
 
@@ -416,11 +501,23 @@ WHILE:
             println(i)
         }
 
+BLOCK:
+ {
+            i++
+            println(i)
+        }
+
 POSTFIX_EXPRESSION:
  i++
 
 FOR:
  for (k in 0..9) {
+            j++
+            println(j)
+        }
+
+BLOCK:
+ {
             j++
             println(j)
         }
