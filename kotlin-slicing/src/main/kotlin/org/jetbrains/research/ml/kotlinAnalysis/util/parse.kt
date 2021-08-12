@@ -7,11 +7,9 @@ fun parse(path: Path): MutableMap<String, MutableSet<Int>> {
     val slices = mutableMapOf<String, MutableSet<Int>>()
     for (line in File(path.toString()).readLines()) {
         val pair = line.split(":")
-        val klass = ktClassToFileName(pair[0])
+        val className = pair[0]
         val lineNumber = pair[1].toInt()
-        if (lineNumber > 0) {
-            slices.getOrPut(klass) { mutableSetOf() }.add(lineNumber)
-        }
+        if (lineNumber > 0) slices.getOrPut(className) { mutableSetOf() }.add(lineNumber)
     }
     return slices
 }
@@ -25,6 +23,3 @@ fun unpackSlices(lineNumbers: Set<Int>, lines: List<String>): MutableMap<Int, St
     }
     return result
 }
-
-fun ktClassToFileName(className: String) =
-    className.replace(Regex("""(\w+\.)*"""), "").removeSuffix("Kt")

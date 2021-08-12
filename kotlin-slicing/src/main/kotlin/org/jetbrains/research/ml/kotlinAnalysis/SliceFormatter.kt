@@ -98,6 +98,41 @@ class SliceFormatter(private val psiFile: PsiFile,
         override fun visitKtElement(element: KtElement) {
             analyzeElement(element) // ignore return type
         }
+
+        override fun visitProperty(property: KtProperty) {
+            if (!analyzeElement(property)) return
+            when (val lastChild = (property as PsiElement).lastChild) {
+                is KtIfExpression -> visitIfExpressionSafely(lastChild)
+                is KtWhenExpression -> visitWhenExpressionSafely(lastChild)
+            }
+        }
+
+        private fun visitIfExpressionSafely(expression: KtIfExpression) { // variable declaration with if
+            analyzeElement(expression)
+
+            val then = expression.then
+            then?.accept(this, null)
+
+            val els = expression.`else` ?: return
+            visitElseSafely(els)
+        }
+
+        private fun visitWhenExpressionSafely(expression: KtWhenExpression) {
+            analyzeElement(expression)
+
+            for (entry in expression.entries) {
+                if (!entry.isElse) visitWhenEntry(entry)
+                else visitElseSafely(entry.expression ?: return)
+            }
+        }
+
+        private fun visitElseSafely(els: KtElement) {
+            when (els) {
+                is KtBlockExpression -> els.acceptChildren(this, null)
+                is KtIfExpression -> visitIfExpressionSafely(els)
+                is KtWhenExpression -> visitWhenExpressionSafely(els)
+            }
+        }
     }
 
 //  TODO: PsiElement has a *range* of line numbers, not a single line number
