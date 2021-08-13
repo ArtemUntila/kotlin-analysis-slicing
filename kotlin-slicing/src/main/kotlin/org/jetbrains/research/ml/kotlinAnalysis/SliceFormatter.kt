@@ -3,6 +3,8 @@ package org.jetbrains.research.ml.kotlinAnalysis
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Document
 import com.intellij.psi.*
+import org.jetbrains.kotlin.idea.intentions.callExpression
+import org.jetbrains.kotlin.idea.intentions.singleLambdaArgumentExpression
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.debugText.getDebugText
 import org.jetbrains.kotlin.psi.psiUtil.pureEndOffset
@@ -27,8 +29,6 @@ class SliceFormatter(private val psiFile: PsiFile,
         psiFile.accept(SlicingKtVisitor())
         debugWriter.println("\n==========SLICE ELEMENTS==========\n")
         sliceElements.forEach { debugWriter.println("$it:\n ${it.getDebugText()}\n") }
-
-        debugWriter.println("\n==========FORMATTING==========\n")
         try {
             CommandProcessor.getInstance().executeCommand(
                 null, { elementsToDelete.forEach { it.delete() } }, null, null
@@ -42,6 +42,7 @@ class SliceFormatter(private val psiFile: PsiFile,
         }
     }
 
+    // TODO: Research references and properties to include soot constants in slice.
     private inner class SlicingKtVisitor : KtTreeVisitorVoid() {
 
         override fun visitPackageDirective(directive: KtPackageDirective) {
@@ -101,9 +102,12 @@ class SliceFormatter(private val psiFile: PsiFile,
 
         override fun visitProperty(property: KtProperty) {
             if (!analyzeElement(property)) return
-            when (val lastChild = (property as PsiElement).lastChild) {
-                is KtIfExpression -> visitIfExpressionSafely(lastChild)
-                is KtWhenExpression -> visitWhenExpressionSafely(lastChild)
+
+            when (val initializer = property.delegateExpressionOrInitializer) {
+                is KtIfExpression -> visitIfExpressionSafely(initializer)
+                is KtWhenExpression -> visitWhenExpressionSafely(initializer)
+                is KtDotQualifiedExpression -> // lambda
+                    initializer.callExpression?.singleLambdaArgumentExpression()?.accept(this, null)
             }
         }
 
@@ -111,7 +115,7 @@ class SliceFormatter(private val psiFile: PsiFile,
             analyzeElement(expression)
 
             val then = expression.then
-            then?.accept(this, null)
+            if (then != null) analyzeElement(then)
 
             val els = expression.`else` ?: return
             visitElseSafely(els)
@@ -121,7 +125,7 @@ class SliceFormatter(private val psiFile: PsiFile,
             analyzeElement(expression)
 
             for (entry in expression.entries) {
-                if (!entry.isElse) visitWhenEntry(entry)
+                if (!entry.isElse) analyzeElement(entry)
                 else visitElseSafely(entry.expression ?: return)
             }
         }
@@ -132,6 +136,10 @@ class SliceFormatter(private val psiFile: PsiFile,
                 is KtIfExpression -> visitIfExpressionSafely(els)
                 is KtWhenExpression -> visitWhenExpressionSafely(els)
             }
+        }
+
+        override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
+            if (analyzeElement(lambdaExpression)) lambdaExpression.bodyExpression?.accept(this, null)
         }
     }
 
