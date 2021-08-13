@@ -1,0 +1,163 @@
+PACKAGE_DIRECTIVE: i = 1   class = class org.jetbrains.kotlin.psi.KtPackageDirective (Kotlin reflection is not available)    text:
+package scripts
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+IMPORT_LIST: i = 1   class = class org.jetbrains.kotlin.psi.KtImportList (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+FUN: i = 3   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun main() {
+    var a = intArrayOf(0, 1)
+    a = addAndReturn(a)
+    add(a)
+    println(a.contentToString())
+}
+
+ADD: CONTAINER
+
+BLOCK: i = 3   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+    var a = intArrayOf(0, 1)
+    a = addAndReturn(a)
+    add(a)
+    println(a.contentToString())
+}
+
+ADD: CONTAINER
+
+PROPERTY: i = 4   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+var a = intArrayOf(0, 1)
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 5   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+a = addAndReturn(a)
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 6   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+add(a)
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 7   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+println(a.contentToString())
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 10   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun add(a: IntArray) {
+    a[0] += 1
+}
+
+ADD: CONTAINER
+
+BLOCK: i = 10   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+    a[0] += 1
+}
+
+ADD: CONTAINER
+
+BINARY_EXPRESSION: i = 11   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+a[0] += 1
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 14   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun addAndReturn(a: IntArray): IntArray {
+    a[0] += 1
+    return a
+}
+
+ADD: CONTAINER
+
+BLOCK: i = 14   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+    a[0] += 1
+    return a
+}
+
+ADD: CONTAINER
+
+BINARY_EXPRESSION: i = 15   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+a[0] += 1
+
+ADD: SLICE_ELEMENT
+
+RETURN: i = 16   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return a
+
+ADD: SLICE_ELEMENT
+
+
+==========SLICE ELEMENTS==========
+
+PACKAGE_DIRECTIVE:
+ package scripts
+
+IMPORT_LIST:
+ 
+
+FUN:
+ fun main() {
+    var a = intArrayOf(0, 1)
+    a = addAndReturn(a)
+    add(a)
+    println(a.contentToString())
+}
+
+BLOCK:
+ {
+    var a = intArrayOf(0, 1)
+    a = addAndReturn(a)
+    add(a)
+    println(a.contentToString())
+}
+
+PROPERTY:
+ var a = intArrayOf(0, 1)
+
+BINARY_EXPRESSION:
+ a = addAndReturn(a)
+
+CALL_EXPRESSION:
+ add(a)
+
+CALL_EXPRESSION:
+ println(a.contentToString())
+
+FUN:
+ fun add(a: IntArray) {
+    a[0] += 1
+}
+
+BLOCK:
+ {
+    a[0] += 1
+}
+
+BINARY_EXPRESSION:
+ a[0] += 1
+
+FUN:
+ fun addAndReturn(a: IntArray): IntArray {
+    a[0] += 1
+    return a
+}
+
+BLOCK:
+ {
+    a[0] += 1
+    return a
+}
+
+BINARY_EXPRESSION:
+ a[0] += 1
+
+RETURN:
+ return a
+
