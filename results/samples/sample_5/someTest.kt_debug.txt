@@ -1,0 +1,63 @@
+PACKAGE_DIRECTIVE: i = 1   class = class org.jetbrains.kotlin.psi.KtPackageDirective (Kotlin reflection is not available)    text:
+package scripts
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+IMPORT_LIST: i = 1   class = class org.jetbrains.kotlin.psi.KtImportList (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+FUN: i = 3   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun main() {
+    val some = SomeClass(2)
+    println(some)
+}
+
+ADD: CONTAINER
+
+BLOCK: i = 3   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+    val some = SomeClass(2)
+    println(some)
+}
+
+ADD: CONTAINER
+
+PROPERTY: i = 4   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val some = SomeClass(2)
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 5   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+println(some)
+
+ADD: SLICE_ELEMENT
+
+
+==========SLICE ELEMENTS==========
+
+PACKAGE_DIRECTIVE:
+ package scripts
+
+IMPORT_LIST:
+ 
+
+FUN:
+ fun main() {
+    val some = SomeClass(2)
+    println(some)
+}
+
+BLOCK:
+ {
+    val some = SomeClass(2)
+    println(some)
+}
+
+PROPERTY:
+ val some = SomeClass(2)
+
+CALL_EXPRESSION:
+ println(some)
+

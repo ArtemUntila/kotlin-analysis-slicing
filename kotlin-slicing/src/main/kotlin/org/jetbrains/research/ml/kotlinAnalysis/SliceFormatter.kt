@@ -4,7 +4,6 @@ import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Document
 import com.intellij.psi.*
 import org.jetbrains.kotlin.idea.intentions.callExpression
-import org.jetbrains.kotlin.idea.intentions.singleLambdaArgumentExpression
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.debugText.getDebugText
 import org.jetbrains.kotlin.psi.psiUtil.pureEndOffset
@@ -45,6 +44,7 @@ class SliceFormatter(private val psiFile: PsiFile,
     // TODO: Research references and properties to include soot constants in slice.
     private inner class SlicingKtVisitor : KtTreeVisitorVoid() {
 
+        /**Always retained elements*/
         override fun visitPackageDirective(directive: KtPackageDirective) {
             printDebug(directive, directive.getStartLineNumber())
             debugWriter.println("ADD: ALWAYS_RETAINED_PSI_ELEMENT\n")
@@ -57,6 +57,7 @@ class SliceFormatter(private val psiFile: PsiFile,
             sliceElements.add(importList)
         }
 
+        /**Functions related to visiting Classes or Objects*/
         override fun visitClassOrObject(classOrObject: KtClassOrObject) {
             if (analyzeElement(classOrObject)) classOrObject.body?.accept(this, null)
         }
@@ -65,6 +66,15 @@ class SliceFormatter(private val psiFile: PsiFile,
             if (analyzeElement(classBody)) classBody.acceptChildren(this, null)
         }
 
+        override fun visitClassInitializer(initializer: KtClassInitializer) {
+            if (analyzeElement(initializer)) initializer.body?.accept(this, null)
+        }
+
+        override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
+            if (analyzeElement(constructor)) constructor.bodyExpression?.accept(this, null)
+        }
+
+        /**Functions related to visiting body containers*/
         override fun visitNamedFunction(function: KtNamedFunction) {
             if (analyzeElement(function)) function.bodyExpression?.accept(this, null)
         }
@@ -84,8 +94,8 @@ class SliceFormatter(private val psiFile: PsiFile,
             if (analyzeElement(expression)) for (entry in expression.entries) visitWhenEntry(entry)
         }
 
-        override fun visitWhenEntry(jetWhenEntry: KtWhenEntry) {
-            if (analyzeElement(jetWhenEntry)) jetWhenEntry.expression?.accept(this, null)
+        override fun visitWhenEntry(whenEntry: KtWhenEntry) {
+            if (analyzeElement(whenEntry)) whenEntry.expression?.accept(this, null)
         }
 
         override fun visitLoopExpression(loopExpression: KtLoopExpression) {
@@ -96,18 +106,20 @@ class SliceFormatter(private val psiFile: PsiFile,
             if (analyzeElement(expression)) expression.acceptChildren(this, null)
         }
 
-        override fun visitKtElement(element: KtElement) {
-            analyzeElement(element) // ignore return type
+        /**Functions related to visiting If and When as an Expression*/
+        override fun visitProperty(property: KtProperty) {
+            if (analyzeElement(property)) visitExpressionSafely(property.delegateExpressionOrInitializer)
         }
 
-        override fun visitProperty(property: KtProperty) {
-            if (!analyzeElement(property)) return
+        override fun visitBinaryExpression(expression: KtBinaryExpression) {
+            if (analyzeElement(expression)) visitExpressionSafely(expression.right)
+        }
 
-            when (val initializer = property.delegateExpressionOrInitializer) {
-                is KtIfExpression -> visitIfExpressionSafely(initializer)
-                is KtWhenExpression -> visitWhenExpressionSafely(initializer)
-                is KtDotQualifiedExpression -> // lambda
-                    initializer.callExpression?.singleLambdaArgumentExpression()?.accept(this, null)
+        private fun visitExpressionSafely(expression: KtExpression?) {
+            when (expression) {
+                is KtIfExpression -> visitIfExpressionSafely(expression)
+                is KtWhenExpression -> visitWhenExpressionSafely(expression)
+                is KtDotQualifiedExpression -> visitDotQualifiedExpression(expression)
             }
         }
 
@@ -138,14 +150,24 @@ class SliceFormatter(private val psiFile: PsiFile,
             }
         }
 
+        /**Functions related to visiting Lambda Expressions*/
+        override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+            if (!analyzeElement(expression)) return
+            expression.callExpression?.lambdaArguments?.forEach {
+                it.getLambdaExpression()?.accept(this, null)
+            }
+        }
+
         override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
             if (analyzeElement(lambdaExpression)) lambdaExpression.bodyExpression?.accept(this, null)
         }
+
+        /**For all that left*/
+        override fun visitKtElement(element: KtElement) {
+            analyzeElement(element) // ignore return type
+        }
     }
 
-//  TODO: PsiElement has a *range* of line numbers, not a single line number
-//  TODO: +- done, because KtElement ? declaration / assignment includes everything after "="
-//  TODO: UDP: DONE -> element.containsSliceElement()
     private fun analyzeElement(element: KtElement): Boolean {
         val startLineNumber = element.getStartLineNumber()
         printDebug(element, startLineNumber)
