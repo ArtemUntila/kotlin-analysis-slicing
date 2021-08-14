@@ -6,7 +6,8 @@ class SomeClass {
         this.a = if (a % 2 == 0) {
             a * 2
         } else {
-            }
+            a
+        }
     }
 
     }

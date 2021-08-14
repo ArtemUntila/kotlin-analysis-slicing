@@ -24,6 +24,7 @@ BLOCK: i = 3   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin 
 
 ADD: CONTAINER
 
+HAS TYPE: true    TYPE REF: null    REF TYPE ELEMENT: null
 PROPERTY: i = 4   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
 val some = SomeClass(2)
 

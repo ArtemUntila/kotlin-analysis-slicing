@@ -11,7 +11,7 @@ ADD: ALWAYS_RETAINED_PSI_ELEMENT
 CLASS: i = 3   class = class org.jetbrains.kotlin.psi.KtClass (Kotlin reflection is not available)    text:
 class SomeClass {
 
-    val a: Int
+    var a: Int
 
     constructor(a: Int) {
         this.a = if (a % 2 == 0) {
@@ -31,7 +31,7 @@ ADD: CONTAINER
 CLASS_BODY: i = 3   class = class org.jetbrains.kotlin.psi.KtClassBody (Kotlin reflection is not available)    text:
 {
 
-    val a: Int
+    var a: Int
 
     constructor(a: Int) {
         this.a = if (a % 2 == 0) {
@@ -48,8 +48,9 @@ CLASS_BODY: i = 3   class = class org.jetbrains.kotlin.psi.KtClassBody (Kotlin r
 
 ADD: CONTAINER
 
+HAS TYPE: false    TYPE REF: TYPE_REFERENCE    REF TYPE ELEMENT: Int
 PROPERTY: i = 5   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
-val a: Int
+var a: Int
 
 SKIP
 
@@ -84,27 +85,6 @@ this.a = if (a % 2 == 0) {
 
 ADD: SLICE_ELEMENT
 
-IF: i = 8   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
-if (a % 2 == 0) {
-            a * 2
-        } else {
-            a
-        }
-
-ADD: SLICE_ELEMENT
-
-BLOCK: i = 8   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
-{
-            a * 2
-        }
-
-ADD: SLICE_ELEMENT
-
-REFERENCE_EXPRESSION: i = 11   class = class org.jetbrains.kotlin.psi.KtNameReferenceExpression (Kotlin reflection is not available)    text:
-a
-
-SKIP
-
 FUN: i = 15   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
 override fun toString(): String {
         return a.toString()
@@ -124,7 +104,7 @@ IMPORT_LIST:
 CLASS:
  class SomeClass {
 
-    val a: Int
+    var a: Int
 
     constructor(a: Int) {
         this.a = if (a % 2 == 0) {
@@ -142,7 +122,7 @@ CLASS:
 CLASS_BODY:
  {
 
-    val a: Int
+    var a: Int
 
     constructor(a: Int) {
         this.a = if (a % 2 == 0) {
@@ -180,17 +160,5 @@ BINARY_EXPRESSION:
             a * 2
         } else {
             a
-        }
-
-IF:
- if (a % 2 == 0) {
-            a * 2
-        } else {
-            a
-        }
-
-BLOCK:
- {
-            a * 2
         }
 

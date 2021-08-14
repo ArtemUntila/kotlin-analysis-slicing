@@ -4,6 +4,7 @@ import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Document
 import com.intellij.psi.*
 import org.jetbrains.kotlin.idea.intentions.callExpression
+import org.jetbrains.kotlin.idea.search.KotlinSearchUsagesSupport.Companion.hasType
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.debugText.getDebugText
 import org.jetbrains.kotlin.psi.psiUtil.pureEndOffset
@@ -107,13 +108,18 @@ class SliceFormatter(private val psiFile: PsiFile,
         }
 
         /**Functions related to visiting If and When as an Expression*/
+        // seems like this part can be removed at all, reason is in the comment below
         override fun visitProperty(property: KtProperty) {
+            // can be sliced if "REF TYPE ELEMENT" is null or contains "Any" -- but is it necessary?
+            debugWriter.println("HAS TYPE: ${property.hasType}    TYPE REF: ${property.typeReference}    " +
+                    "REF TYPE ELEMENT: ${property.typeReference?.typeElement?.getDebugText()}")
+
             if (analyzeElement(property)) visitExpressionSafely(property.delegateExpressionOrInitializer)
         }
 
-        override fun visitBinaryExpression(expression: KtBinaryExpression) {
-            if (analyzeElement(expression)) visitExpressionSafely(expression.right)
-        }
+//        override fun visitBinaryExpression(expression: KtBinaryExpression) {
+//            if (analyzeElement(expression)) visitExpressionSafely(expression.right)
+//        }
 
         private fun visitExpressionSafely(expression: KtExpression?) {
             when (expression) {
@@ -144,9 +150,9 @@ class SliceFormatter(private val psiFile: PsiFile,
 
         private fun visitElseSafely(els: KtElement) {
             when (els) {
-                is KtBlockExpression -> els.acceptChildren(this, null)
                 is KtIfExpression -> visitIfExpressionSafely(els)
                 is KtWhenExpression -> visitWhenExpressionSafely(els)
+                is KtBlockExpression -> els.acceptChildren(this, null)
             }
         }
 
