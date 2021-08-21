@@ -1,0 +1,211 @@
+PACKAGE_DIRECTIVE: i = 1   class = class org.jetbrains.kotlin.psi.KtPackageDirective (Kotlin reflection is not available)    text:
+package util
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+IMPORT_LIST: i = 1   class = class org.jetbrains.kotlin.psi.KtImportList (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+FUN: i = 3   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun main() {
+    val v = 1
+
+    var out1: String
+    if (v == 0) {
+        out1 = "zero"
+    } else if (v % 2 == 0) {
+        out1 = "even"
+    } else {
+        out1 = "not even"
+    }
+
+    val out2 = if (v == 0) {
+        0
+    } else if (v % 2 == 0) {
+        2
+    } else {
+        1
+    }
+
+    val out3 = sum(
+        1, 2, 3,
+        4, 5, 6
+    )
+
+    println("$out1\n$out2\n$out3")
+}
+
+ADD: CONTAINER
+
+PROPERTY: i = 4   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val v = 1
+
+SKIP
+
+UNDO DELETING USED CONSTANT
+
+PROPERTY: i = 6   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+var out1: String
+
+SKIP
+
+UNDO DELETING USED CONSTANT
+
+IF: i = 7   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (v == 0) {
+        out1 = "zero"
+    } else if (v % 2 == 0) {
+        out1 = "even"
+    } else {
+        out1 = "not even"
+    }
+
+ADD: CONTAINER
+
+BINARY_EXPRESSION: i = 8   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+out1 = "zero"
+
+SKIP
+
+THIS EXPRESSION INITIALIZES PROPERTY, MUST NOT BE REMOVED
+
+IF: i = 9   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (v % 2 == 0) {
+        out1 = "even"
+    } else {
+        out1 = "not even"
+    }
+
+ADD: CONTAINER
+
+BINARY_EXPRESSION: i = 10   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+out1 = "even"
+
+SKIP
+
+THIS EXPRESSION INITIALIZES PROPERTY, MUST NOT BE REMOVED
+
+BINARY_EXPRESSION: i = 12   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+out1 = "not even"
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 15   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val out2 = if (v == 0) {
+        0
+    } else if (v % 2 == 0) {
+        2
+    } else {
+        1
+    }
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 23   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val out3 = sum(
+        1, 2, 3,
+        4, 5, 6
+    )
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 28   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+println("$out1\n$out2\n$out3")
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 31   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun sum(vararg args: Int) =
+    args.sum()
+
+ADD: CONTAINER
+
+DOT_QUALIFIED_EXPRESSION: i = 32   class = class org.jetbrains.kotlin.psi.KtDotQualifiedExpression (Kotlin reflection is not available)    text:
+args.sum()
+
+ADD: SLICE_ELEMENT
+
+
+==========SLICE ELEMENTS==========
+
+PACKAGE_DIRECTIVE:
+ package util
+
+IMPORT_LIST:
+ 
+
+FUN:
+ fun main() {
+    val v = 1
+
+    var out1: String
+    if (v == 0) {
+        out1 = "zero"
+    } else if (v % 2 == 0) {
+        out1 = "even"
+    } else {
+        out1 = "not even"
+    }
+
+    val out2 = if (v == 0) {
+        0
+    } else if (v % 2 == 0) {
+        2
+    } else {
+        1
+    }
+
+    val out3 = sum(
+        1, 2, 3,
+        4, 5, 6
+    )
+
+    println("$out1\n$out2\n$out3")
+}
+
+IF:
+ if (v == 0) {
+        out1 = "zero"
+    } else if (v % 2 == 0) {
+        out1 = "even"
+    } else {
+        out1 = "not even"
+    }
+
+IF:
+ if (v % 2 == 0) {
+        out1 = "even"
+    } else {
+        out1 = "not even"
+    }
+
+BINARY_EXPRESSION:
+ out1 = "not even"
+
+PROPERTY:
+ val out2 = if (v == 0) {
+        0
+    } else if (v % 2 == 0) {
+        2
+    } else {
+        1
+    }
+
+PROPERTY:
+ val out3 = sum(
+        1, 2, 3,
+        4, 5, 6
+    )
+
+CALL_EXPRESSION:
+ println("$out1\n$out2\n$out3")
+
+FUN:
+ fun sum(vararg args: Int) =
+    args.sum()
+
+DOT_QUALIFIED_EXPRESSION:
+ args.sum()
+

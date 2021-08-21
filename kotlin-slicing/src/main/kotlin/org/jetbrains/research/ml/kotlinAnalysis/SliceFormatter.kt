@@ -3,10 +3,13 @@ package org.jetbrains.research.ml.kotlinAnalysis
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Document
 import com.intellij.psi.*
+import com.intellij.psi.search.searches.ReferencesSearch
 import org.jetbrains.kotlin.idea.intentions.callExpression
-import org.jetbrains.kotlin.idea.search.KotlinSearchUsagesSupport.Companion.hasType
+import org.jetbrains.kotlin.idea.intentions.singleLambdaArgumentExpression
+import org.jetbrains.kotlin.nj2k.postProcessing.resolve
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.debugText.getDebugText
+import org.jetbrains.kotlin.psi.psiUtil.asAssignment
 import org.jetbrains.kotlin.psi.psiUtil.pureEndOffset
 import org.jetbrains.kotlin.psi.psiUtil.pureStartOffset
 import org.jetbrains.research.ml.kotlinAnalysis.util.getPrintWriter
@@ -81,13 +84,24 @@ class SliceFormatter(private val psiFile: PsiFile,
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
+            // What happens with:
+            // foo(
+            //   if (true)
+            //     42
+            //   else {
+            //     ...
+            //     ...
+            //     "hello" -> mk<String>()
+            //   }
+            // )
+
             if (!analyzeElement(expression)) return
 
             val then = expression.then
             then?.accept(this, null)
 
-            val els = expression.`else`
-            els?.accept(this, null)
+            val els = expression.`else` ?: return
+            els.accept(this, null)
             if ((els as PsiElement) in elementsToDelete) elementsToDelete.add(expression.elseKeyword!!)
         }
 
@@ -104,64 +118,58 @@ class SliceFormatter(private val psiFile: PsiFile,
         }
 
         override fun visitBlockExpression(expression: KtBlockExpression) {
-            if (analyzeElement(expression)) expression.acceptChildren(this, null)
+            /*if (analyzeElement(expression))*/ expression.acceptChildren(this, null)
         }
 
-        /**Functions related to visiting If and When as an Expression*/
-        // seems like this part can be removed at all, reason is in the comment below
         override fun visitProperty(property: KtProperty) {
             // can be sliced if "REF TYPE ELEMENT" is null or contains "Any" -- but is it necessary?
-            debugWriter.println("HAS TYPE: ${property.hasType}    TYPE REF: ${property.typeReference}    " +
-                    "REF TYPE ELEMENT: ${property.typeReference?.typeElement?.getDebugText()}")
+//            debugWriter.println("HAS TYPE: ${property.hasType}    TYPE REF: ${property.typeReference}    " +
+//                    "REF TYPE ELEMENT: ${property.typeReference?.typeElement?.getDebugText()}")
+
+            // What happens with:
+            // val lambda = { ... 42 }
+            // val listOfFortyTwos = listOf(1, 2, 3).map(lambda)
 
             if (analyzeElement(property)) visitExpressionSafely(property.delegateExpressionOrInitializer)
+            else { // including constant: val a = 0 -- undo deleting
+                val references = ReferencesSearch.search(property)
+                // PsiReference -> KtNameReference -> Expression -> ArgumentList || Condition || ...
+                val used = references.any { (it.element.parent.parent as KtElement).containsSliceElement() }
+                if (used) {
+                    elementsToDelete.remove(property)
+                    debugWriter.println("UNDO DELETING USED CONSTANT\n")
+                }
+            }
         }
 
-//        override fun visitBinaryExpression(expression: KtBinaryExpression) {
-//            if (analyzeElement(expression)) visitExpressionSafely(expression.right)
-//        }
+        override fun visitBinaryExpression(expression: KtBinaryExpression) {
+            if (!analyzeElement(expression)) {
+                val assignment = expression.asAssignment() ?: return
+                val left = assignment.left as KtNameReferenceExpression
+                val property = left.resolve() as KtProperty
+                if ((property as PsiElement) !in elementsToDelete && property.delegateExpressionOrInitializer == null) {
+                        elementsToDelete.remove(expression as PsiElement)
+                } // example: val a: Int; if (...) a = 1 else a = 2 -- both expressions should be included in slice
+                debugWriter.println("THIS EXPRESSION INITIALIZES PROPERTY, MUST NOT BE REMOVED\n")
+            }
+            visitExpressionSafely(expression.right)
+        }
 
         private fun visitExpressionSafely(expression: KtExpression?) {
             when (expression) {
-                is KtIfExpression -> visitIfExpressionSafely(expression)
-                is KtWhenExpression -> visitWhenExpressionSafely(expression)
+//                is KtIfExpression -> visitIfExpressionSafely(expression)
+//                is KtWhenExpression -> visitWhenExpressionSafely(expression)
                 is KtDotQualifiedExpression -> visitDotQualifiedExpression(expression)
-            }
-        }
-
-        private fun visitIfExpressionSafely(expression: KtIfExpression) { // variable declaration with if
-            analyzeElement(expression)
-
-            val then = expression.then
-            if (then != null) analyzeElement(then)
-
-            val els = expression.`else` ?: return
-            visitElseSafely(els)
-        }
-
-        private fun visitWhenExpressionSafely(expression: KtWhenExpression) {
-            analyzeElement(expression)
-
-            for (entry in expression.entries) {
-                if (!entry.isElse) analyzeElement(entry)
-                else visitElseSafely(entry.expression ?: return)
-            }
-        }
-
-        private fun visitElseSafely(els: KtElement) {
-            when (els) {
-                is KtIfExpression -> visitIfExpressionSafely(els)
-                is KtWhenExpression -> visitWhenExpressionSafely(els)
-                is KtBlockExpression -> els.acceptChildren(this, null)
             }
         }
 
         /**Functions related to visiting Lambda Expressions*/
         override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
             if (!analyzeElement(expression)) return
-            expression.callExpression?.lambdaArguments?.forEach {
-                it.getLambdaExpression()?.accept(this, null)
-            }
+            val lambda = expression.callExpression?.singleLambdaArgumentExpression() ?: return
+            lambda.accept(this, null)
+            expression.receiverExpression.accept(this, null) // slicing previous lambda
+            // expression.callExpression?.singleLambdaArgumentExpression()?.accept(this, null)
         }
 
         override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
@@ -172,6 +180,41 @@ class SliceFormatter(private val psiFile: PsiFile,
         override fun visitKtElement(element: KtElement) {
             analyzeElement(element) // ignore return type
         }
+
+//        override fun visitConstantExpression(expression: KtConstantExpression) {
+//            super.visitConstantExpression(expression)
+//        }
+//
+//        override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
+//            super.visitStringTemplateExpression(expression)
+//        }
+
+//        private fun visitIfExpressionSafely(expression: KtIfExpression) { // variable declaration with if
+//            analyzeElement(expression)
+//
+//            val then = expression.then
+//            if (then != null) analyzeElement(then)
+//
+//            val els = expression.`else` ?: return
+//            visitElseSafely(els)
+//        }
+//
+//        private fun visitWhenExpressionSafely(expression: KtWhenExpression) {
+//            analyzeElement(expression)
+//
+//            for (entry in expression.entries) {
+//                if (!entry.isElse) analyzeElement(entry)
+//                else visitElseSafely(entry.expression ?: return)
+//            }
+//        }
+//
+//        private fun visitElseSafely(els: KtElement) {
+//            when (els) {
+//                is KtIfExpression -> visitIfExpressionSafely(els)
+//                is KtWhenExpression -> visitWhenExpressionSafely(els)
+//                is KtBlockExpression -> els.acceptChildren(this, null)
+//            }
+//        }
     }
 
     private fun analyzeElement(element: KtElement): Boolean {
