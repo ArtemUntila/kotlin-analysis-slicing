@@ -27,19 +27,16 @@ interface Slicer {
 
     fun execute()
 
-    fun KtElement.getStartLineNumber() = document.getLineNumber(this.pureStartOffset) + 1
-
-    fun KtElement.getEndLineNumber() = document.getLineNumber(this.pureEndOffset) + 1
-
-    fun KtElement.containsSliceElement(): Boolean {
-        val startLineNumber = this.getStartLineNumber()
-        val endLineNumber = this.getEndLineNumber()
-        return (startLineNumber..endLineNumber).any { it in lineNumbers }
-    }
+    fun KtElement.containsSliceElement(): Boolean =
+        (this.getStartLineNumber()..this.getEndLineNumber()).any { it in lineNumbers }
 
     fun printDebug(element: KtElement) =
         debugWriter.println(
             "$element: i = ${element.getStartLineNumber()}   class = ${element::class}    " +
                     "text:\n${element.getDebugText()}\n"
         )
+
+    fun KtElement.getStartLineNumber() = document.getLineNumber(this.pureStartOffset) + 1
+
+    fun KtElement.getEndLineNumber() = document.getLineNumber(this.pureEndOffset) + 1
 }

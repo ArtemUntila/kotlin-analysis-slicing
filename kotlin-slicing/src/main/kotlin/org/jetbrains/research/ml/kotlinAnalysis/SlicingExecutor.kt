@@ -11,7 +11,7 @@ import org.jetbrains.research.ml.kotlinAnalysis.util.parse
 import org.jetbrains.research.ml.kotlinAnalysis.util.unpackSlices
 import java.nio.file.Path
 
-open class SlicingExecutor(private val outputDir: Path, private val slice: Path) : AnalysisExecutor() {
+class SlicingExecutor(private val outputDir: Path, private val slice: Path) : AnalysisExecutor() {
 
     private val infoResourceManager = PrintWriterResourceManager(outputDir, "slicing_info.txt")
     override val controlledResourceManagers = mutableSetOf<ResourceManager>(infoResourceManager)

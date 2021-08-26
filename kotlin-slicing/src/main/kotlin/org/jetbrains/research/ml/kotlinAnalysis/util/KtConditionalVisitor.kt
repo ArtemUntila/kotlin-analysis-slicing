@@ -3,7 +3,7 @@ package org.jetbrains.research.ml.kotlinAnalysis.util
 import com.intellij.openapi.util.Condition
 import org.jetbrains.kotlin.psi.*
 
-abstract class KtConditionalVisitor: KtTreeVisitorVoid() {
+abstract class KtConditionalVisitor : KtTreeVisitorVoid() {
 
     abstract val condition: Condition<KtElement>
 

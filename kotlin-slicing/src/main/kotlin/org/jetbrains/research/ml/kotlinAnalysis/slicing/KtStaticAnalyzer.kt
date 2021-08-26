@@ -40,8 +40,10 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
 
         /**Included properties*/
         override fun visitProperty(property: KtProperty) {
-            if (property.containsSliceElement()) processProperty(property)
-            else processSkippedProperty(property)
+            if (property.containsSliceElement()) {
+                sliceElements.add(property)
+                processProperty(property)
+            } else processSkippedProperty(property)
         }
 
         private fun processProperty(property: KtProperty) {
@@ -51,7 +53,7 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
             }
         }
 
-        /**If and When as an expressions*/
+        /**IF and WHEN as an expressions*/
         private fun visitIfExpressionSafely(expression: KtIfExpression) {
             visitExpressionSafely(expression.then)
             visitExpressionSafely(expression.`else`)
@@ -71,25 +73,15 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
                 }
                 is KtIfExpression -> visitIfExpressionSafely(expression)
                 is KtWhenExpression -> visitWhenExpressionSafely(expression)
-                else -> processLastStatement(expression)
-            }
-        }
-
-        private fun processLastStatement(expression: KtExpression) {
-            when {
-                // expression.containsSliceElement() -> return
-                expression.isPrimitive() -> expression.addToStaticSlice()
                 else -> processElement(expression)
             }
         }
 
-        private fun KtExpression.isPrimitive() = this is KtConstantExpression || this is KtStringTemplateExpression
-
         private fun processSkippedProperty(property: KtProperty) {
-            // if property is included by dynamic slicing or was processed already
-            debugWriter.println("PROCESS PROPERTY: ${property.getDebugText()}")
+            // if the property is included by a dynamic slicer or has already been processed
+            debugWriter.println("PROCESSING PROPERTY: ${property.getDebugText()}")
             debugWriter.print("SKIPPED = ")
-            if (property.containsSliceElement() || property in sliceElements) {
+            if (property in sliceElements) {
                 debugWriter.println("false\n")
                 return
             }
@@ -110,28 +102,30 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
 
             if (initializer != null) processProperty(property)
             else {
-                debugWriter.println("SEARCH INITIALIZERS\n")
+                debugWriter.println("SEARCHING INITIALIZERS\n")
                 references
                     .filter {
                         it is KtBinaryExpression && it.asAssignment() != null &&
                                 property as PsiElement == (it.left as? KtNameReferenceExpression)?.resolve()
-                    } // initializing assignments
+                    } // assignments-initializers
                     .forEach { processElement(it) }
             }
         }
 
         private fun processElement(element: KtElement) {
             if (element in sliceElements) return // containsSliceElement isn't used because of one-string expressions
-            // else
+
             element.addToStaticSlice()
 
             val dataDependencies = getDataDependencies(element)
             val controlDependencies = getControlDependencies(element)
-            debugWriter.println("PROCESS ELEMENT: ${element.getStartLineNumber()}. ${element.getDebugText()}")
-            debugWriter.println("DATA DEPENDENCIES: ${dataDependencies.map { it.getDebugText() }}")
-            debugWriter.println("CONTROL DEPENDENCIES: ${controlDependencies.map { it.getDebugText() }}\n")
-
             val dependencies = (dataDependencies + controlDependencies).filter { it !in sliceElements }
+
+            debugWriter.println("PROCESSING ELEMENT: ${element.getStartLineNumber()}. ${element.getDebugText()}")
+            debugWriter.println("DATA DEPENDENCIES: ${dataDependencies.map { it.getDebugText() }}")
+            debugWriter.println("CONTROL DEPENDENCIES: ${controlDependencies.map { it.getDebugText() }}")
+            debugWriter.println("NOT PROCESSED DEPENDENCIES: ${dependencies.map { it.getDebugText() }}\n")
+
             for (dependency in dependencies) {
                 if (dependency is KtProperty) processSkippedProperty(dependency)
                 else processElement(dependency)
@@ -172,7 +166,7 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
             var current = element
             val controlDependencies = mutableSetOf<KtElement>()
             while (current !is KtNamedFunction && current !is KtClassOrObject) {
-                //if (parent !in sliceElements) {
+                // if (parent !in sliceElements) {
                 when (current) {
                     is KtIfExpression -> {
                         sliceElements.add(current)
@@ -187,7 +181,7 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
                         controlDependencies.addAll(current.conditions)
                     }
                 }
-                //}
+                // }
                 current = (current as PsiElement).parent as KtElement
             }
             return controlDependencies
