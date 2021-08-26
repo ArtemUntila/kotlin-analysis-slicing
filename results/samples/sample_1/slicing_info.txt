@@ -1,11 +1,9 @@
-map: {scripts.main.kt=[4, 5, 15, 16, 6, 11, 7]}
+map: {main.kt=[26, 2, 6, 8, 20]}
 
-scripts.main.kt:
-4=    var a = intArrayOf(0, 1)
-5=    a = addAndReturn(a)
-6=    add(a)
-7=    println(a.contentToString())
-11=    a[0] += 1
-15=    a[0] += 1
-16=    return a
+main.kt -- main.kt:
+2=    val x = readLine()!!.toInt() // 1 !!!
+6=    if (x > 0) { // !!!
+8=        z = 1 // !!!
+20=    val t = if (z == 1) { // !!!
+26=    println(t) // !!!
 
