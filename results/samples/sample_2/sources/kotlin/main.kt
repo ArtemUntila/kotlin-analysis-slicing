@@ -1,4 +1,4 @@
-fun main() {
+fun main(){
     val x = readLine()!!.toInt() // 1 !!!
     val y: Int
     val z: Int
@@ -24,7 +24,8 @@ fun main() {
         } else "a"
 
     println(t) // !!!
-    }
+    str(y)
+}
 
 fun str(i: Int) =
     "$i"

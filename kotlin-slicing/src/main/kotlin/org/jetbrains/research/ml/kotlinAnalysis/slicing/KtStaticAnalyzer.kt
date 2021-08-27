@@ -42,12 +42,12 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
         override fun visitProperty(property: KtProperty) {
             if (property.containsSliceElement()) {
                 sliceElements.add(property)
-                processProperty(property)
+                processPropertyInitializer(property.delegateExpressionOrInitializer ?: return)
             } else processSkippedProperty(property)
         }
 
-        private fun processProperty(property: KtProperty) {
-            when (val initializer = property.delegateExpressionOrInitializer) {
+        private fun processPropertyInitializer(initializer: KtExpression) {
+            when (initializer) {
                 is KtIfExpression -> visitIfExpressionSafely(initializer)
                 is KtWhenExpression -> visitWhenExpressionSafely(initializer)
             }
@@ -100,7 +100,7 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
             if (!used) return
             else property.addToStaticSlice()
 
-            if (initializer != null) processProperty(property)
+            if (initializer != null) visitExpressionSafely(initializer)
             else {
                 debugWriter.println("SEARCHING INITIALIZERS\n")
                 references
@@ -166,6 +166,7 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
             var current = element
             val controlDependencies = mutableSetOf<KtElement>()
             while (current !is KtNamedFunction && current !is KtClassOrObject) {
+                current = (current as PsiElement).parent as KtElement
                 // if (parent !in sliceElements) {
                 when (current) {
                     is KtIfExpression -> {
@@ -180,9 +181,16 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
                         sliceElements.add(current)
                         controlDependencies.addAll(current.conditions)
                     }
+                    is KtForExpression -> {
+                        sliceElements.add(current)
+                        controlDependencies.add(current.loopRange ?: continue)
+                    }
+                    is KtWhileExpressionBase -> {
+                        sliceElements.add(current)
+                        controlDependencies.add(current.condition ?: continue)
+                    }
                 }
                 // }
-                current = (current as PsiElement).parent as KtElement
             }
             return controlDependencies
         }

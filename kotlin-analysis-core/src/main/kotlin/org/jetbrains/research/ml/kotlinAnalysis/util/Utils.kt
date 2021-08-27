@@ -19,5 +19,6 @@ fun getSubdirectories(path: Path): List<Path> {
 }
 
 fun getPrintWriter(directory: Path, fileName: String): PrintWriter {
-    return File(directory.toFile(), fileName).printWriter()
+    val dirFile = directory.toFile().also { it.mkdirs() }
+    return File(dirFile, fileName).printWriter()
 }

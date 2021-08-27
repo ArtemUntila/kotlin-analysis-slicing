@@ -37,18 +37,19 @@ class SliceFormatter(override val psiFile: PsiFile,
         sliceElements.forEach { debugWriter.println("$it:\n ${it.getDebugText()}\n") }
         debugWriter.println("\n==========ELEMENTS TO DELETE==========\n")
         elementsToDelete.forEach { debugWriter.println("$it:\n ${it.text}\n") }
-        try {
-            CommandProcessor.getInstance().executeCommand(
-                null, { elementsToDelete.forEach { it.delete() } }, null, null
-            )
-
-            val sliceWriter = getPrintWriter(outputDir, name)
-            sliceWriter.println(psiFile.text)
-            sliceWriter.flush()
-        } finally {
-            debugWriter.flush()
-        }
+        debugWriter.flush()
+        CommandProcessor.getInstance().executeCommand(
+            null, { elementsToDelete.forEach { it.delete() } }, null, null
+        )
     }
+
+    fun writeSlice() {
+        val sliceWriter = getPrintWriter(outputDir, name)
+        sliceWriter.println(psiFile.text)
+        sliceWriter.flush()
+    }
+
+    fun getSlicedPsi() = psiFile
 
     private inner class KtSlicingVisitor : KtConditionalVisitor() {
 

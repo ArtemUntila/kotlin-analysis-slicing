@@ -1,4 +1,4 @@
-fun main() {
+fun main(){
     val x = readLine()!!.toInt() // 1 !!!
     val y: Int
     val z: Int
