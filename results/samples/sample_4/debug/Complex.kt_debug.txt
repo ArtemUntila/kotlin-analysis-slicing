@@ -1,0 +1,685 @@
+LINE NUMBERS: [2, 3, 4, 7, 8, 9, 14, 17, 31, 36]
+
+LINE NUMBERS AFTER STATIC ANALYSIS: [2, 3, 4, 5, 6, 7, 8, 9, 14, 17, 31, 36]
+
+PACKAGE_DIRECTIVE: i = 1   class = class org.jetbrains.kotlin.psi.KtPackageDirective (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+IMPORT_LIST: i = 1   class = class org.jetbrains.kotlin.psi.KtImportList (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+FUN: i = 1   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun Complex(s: String) : Complex {
+    val ss = s.substring(0, s.length - 1)
+    val list = ss.split(Regex("""[+\- ]"""))
+    val symbol = ss.replace(Regex("""[\d.i]+"""), "")
+    var real = 0.0
+    var imaginate = 0.0
+    if (symbol.length == 1) {
+        real = list[0].toDouble()
+        imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+    } else {
+        real = list[1].toDouble() * -1
+        imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
+    }
+    return Complex(real, imaginate)
+}
+
+ADD: CONTAINER
+
+BLOCK: i = 1   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+    val ss = s.substring(0, s.length - 1)
+    val list = ss.split(Regex("""[+\- ]"""))
+    val symbol = ss.replace(Regex("""[\d.i]+"""), "")
+    var real = 0.0
+    var imaginate = 0.0
+    if (symbol.length == 1) {
+        real = list[0].toDouble()
+        imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+    } else {
+        real = list[1].toDouble() * -1
+        imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
+    }
+    return Complex(real, imaginate)
+}
+
+ADD: CONTAINER
+
+PROPERTY: i = 2   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val ss = s.substring(0, s.length - 1)
+
+ADD: SLICE_ELEMENT
+
+DOT_QUALIFIED_EXPRESSION: i = 2   class = class org.jetbrains.kotlin.psi.KtDotQualifiedExpression (Kotlin reflection is not available)    text:
+s.substring(0, s.length - 1)
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 3   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val list = ss.split(Regex("""[+\- ]"""))
+
+ADD: SLICE_ELEMENT
+
+DOT_QUALIFIED_EXPRESSION: i = 3   class = class org.jetbrains.kotlin.psi.KtDotQualifiedExpression (Kotlin reflection is not available)    text:
+ss.split(Regex("""[+\- ]"""))
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 4   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val symbol = ss.replace(Regex("""[\d.i]+"""), "")
+
+ADD: SLICE_ELEMENT
+
+DOT_QUALIFIED_EXPRESSION: i = 4   class = class org.jetbrains.kotlin.psi.KtDotQualifiedExpression (Kotlin reflection is not available)    text:
+ss.replace(Regex("""[\d.i]+"""), "")
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 5   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+var real = 0.0
+
+ADD: SLICE_ELEMENT
+
+FLOAT_CONSTANT: i = 5   class = class org.jetbrains.kotlin.psi.KtConstantExpression (Kotlin reflection is not available)    text:
+0.0
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 6   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+var imaginate = 0.0
+
+ADD: SLICE_ELEMENT
+
+FLOAT_CONSTANT: i = 6   class = class org.jetbrains.kotlin.psi.KtConstantExpression (Kotlin reflection is not available)    text:
+0.0
+
+ADD: SLICE_ELEMENT
+
+IF: i = 7   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (symbol.length == 1) {
+        real = list[0].toDouble()
+        imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+    } else {
+        real = list[1].toDouble() * -1
+        imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
+    }
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 7   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        real = list[0].toDouble()
+        imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+    }
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 8   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+real = list[0].toDouble()
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 9   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 10   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        real = list[1].toDouble() * -1
+        imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
+    }
+
+SKIP
+
+RETURN: i = 14   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return Complex(real, imaginate)
+
+ADD: SLICE_ELEMENT
+
+CLASS: i = 17   class = class org.jetbrains.kotlin.psi.KtClass (Kotlin reflection is not available)    text:
+class Complex(val re: Double, val im: Double) {
+    /**
+     * Конструктор из вещественного числа
+     */
+    constructor(x: Double) : this(re = x, im = 0.0)
+
+    /**
+     * Конструктор из строки вида x+yi
+     */
+    //constructor(s: String) : this(re = abc(s)[0], im = abc(s)[1])
+
+    /**
+     * Сложение.
+     */
+    operator fun plus(other: Complex): Complex = Complex(re + other.re, im + other.im)
+
+    /**
+     * Смена знака (у обеих частей числа)
+     */
+    operator fun unaryMinus(): Complex = Complex(-re, -im)
+
+    /**
+     * Вычитание
+     */
+    operator fun minus(other: Complex): Complex = Complex(re - other.re, im - other.im)
+
+    /**
+     * Умножение
+     */
+    operator fun times(other: Complex): Complex =
+        Complex(re * other.re + im * other.im * -1, re * other.im + im * other.re)
+
+    /**
+     * Деление
+     */
+    operator fun div(other: Complex): Complex {
+        val real = (re * other.re + im * other.im) / (other.re * other.re + other.im * other.im)
+        val imaginate = (im * other.re - re * other.im) / (other.re * other.re + other.im * other.im)
+        return Complex(real, imaginate)
+    }
+
+    /**
+     * Сравнение на равенство
+     */
+    override fun equals(other: Any?): Boolean {
+        if (other is Complex)
+            return other.re == re && other.im == im
+        return false
+    }
+
+    /**
+     * Преобразование в строку
+     */
+    override fun toString(): String =
+        when {
+            re == 0.0 && im != 0.0 -> "${im}i"
+            im == 0.0 && re != 0.0 -> "$re"
+            im == 1.0 -> "$re+i"
+            im == -1.0 -> "$re-i"
+            im > 0.0 -> "$re+${im}i"
+            im < 0.0 -> "$re${im}i"
+            else -> "0.0"
+        }
+}
+
+ADD: SLICE_ELEMENT
+
+CLASS_BODY: i = 17   class = class org.jetbrains.kotlin.psi.KtClassBody (Kotlin reflection is not available)    text:
+{
+    /**
+     * Конструктор из вещественного числа
+     */
+    constructor(x: Double) : this(re = x, im = 0.0)
+
+    /**
+     * Конструктор из строки вида x+yi
+     */
+    //constructor(s: String) : this(re = abc(s)[0], im = abc(s)[1])
+
+    /**
+     * Сложение.
+     */
+    operator fun plus(other: Complex): Complex = Complex(re + other.re, im + other.im)
+
+    /**
+     * Смена знака (у обеих частей числа)
+     */
+    operator fun unaryMinus(): Complex = Complex(-re, -im)
+
+    /**
+     * Вычитание
+     */
+    operator fun minus(other: Complex): Complex = Complex(re - other.re, im - other.im)
+
+    /**
+     * Умножение
+     */
+    operator fun times(other: Complex): Complex =
+        Complex(re * other.re + im * other.im * -1, re * other.im + im * other.re)
+
+    /**
+     * Деление
+     */
+    operator fun div(other: Complex): Complex {
+        val real = (re * other.re + im * other.im) / (other.re * other.re + other.im * other.im)
+        val imaginate = (im * other.re - re * other.im) / (other.re * other.re + other.im * other.im)
+        return Complex(real, imaginate)
+    }
+
+    /**
+     * Сравнение на равенство
+     */
+    override fun equals(other: Any?): Boolean {
+        if (other is Complex)
+            return other.re == re && other.im == im
+        return false
+    }
+
+    /**
+     * Преобразование в строку
+     */
+    override fun toString(): String =
+        when {
+            re == 0.0 && im != 0.0 -> "${im}i"
+            im == 0.0 && re != 0.0 -> "$re"
+            im == 1.0 -> "$re+i"
+            im == -1.0 -> "$re-i"
+            im > 0.0 -> "$re+${im}i"
+            im < 0.0 -> "$re${im}i"
+            else -> "0.0"
+        }
+}
+
+ADD: SLICE_ELEMENT
+
+SECONDARY_CONSTRUCTOR: i = 21   class = class org.jetbrains.kotlin.psi.KtSecondaryConstructor (Kotlin reflection is not available)    text:
+/**
+     * Конструктор из вещественного числа
+     */
+    constructor(x: Double) : this(re = x, im = 0.0)
+
+SKIP
+
+FUN: i = 31   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Сложение.
+     */
+    operator fun plus(other: Complex): Complex = Complex(re + other.re, im + other.im)
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 31   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+Complex(re + other.re, im + other.im)
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 36   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Смена знака (у обеих частей числа)
+     */
+    operator fun unaryMinus(): Complex = Complex(-re, -im)
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 36   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+Complex(-re, -im)
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 41   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Вычитание
+     */
+    operator fun minus(other: Complex): Complex = Complex(re - other.re, im - other.im)
+
+SKIP
+
+FUN: i = 46   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Умножение
+     */
+    operator fun times(other: Complex): Complex =
+        Complex(re * other.re + im * other.im * -1, re * other.im + im * other.re)
+
+SKIP
+
+FUN: i = 52   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Деление
+     */
+    operator fun div(other: Complex): Complex {
+        val real = (re * other.re + im * other.im) / (other.re * other.re + other.im * other.im)
+        val imaginate = (im * other.re - re * other.im) / (other.re * other.re + other.im * other.im)
+        return Complex(real, imaginate)
+    }
+
+SKIP
+
+FUN: i = 61   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Сравнение на равенство
+     */
+    override fun equals(other: Any?): Boolean {
+        if (other is Complex)
+            return other.re == re && other.im == im
+        return false
+    }
+
+SKIP
+
+FUN: i = 70   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Преобразование в строку
+     */
+    override fun toString(): String =
+        when {
+            re == 0.0 && im != 0.0 -> "${im}i"
+            im == 0.0 && re != 0.0 -> "$re"
+            im == 1.0 -> "$re+i"
+            im == -1.0 -> "$re-i"
+            im > 0.0 -> "$re+${im}i"
+            im < 0.0 -> "$re${im}i"
+            else -> "0.0"
+        }
+
+SKIP
+
+
+==========SLICE ELEMENTS==========
+
+PACKAGE_DIRECTIVE:
+ 
+
+IMPORT_LIST:
+ 
+
+FUN:
+ fun Complex(s: String) : Complex {
+    val ss = s.substring(0, s.length - 1)
+    val list = ss.split(Regex("""[+\- ]"""))
+    val symbol = ss.replace(Regex("""[\d.i]+"""), "")
+    var real = 0.0
+    var imaginate = 0.0
+    if (symbol.length == 1) {
+        real = list[0].toDouble()
+        imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+    } else {
+        real = list[1].toDouble() * -1
+        imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
+    }
+    return Complex(real, imaginate)
+}
+
+BLOCK:
+ {
+    val ss = s.substring(0, s.length - 1)
+    val list = ss.split(Regex("""[+\- ]"""))
+    val symbol = ss.replace(Regex("""[\d.i]+"""), "")
+    var real = 0.0
+    var imaginate = 0.0
+    if (symbol.length == 1) {
+        real = list[0].toDouble()
+        imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+    } else {
+        real = list[1].toDouble() * -1
+        imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
+    }
+    return Complex(real, imaginate)
+}
+
+PROPERTY:
+ val ss = s.substring(0, s.length - 1)
+
+DOT_QUALIFIED_EXPRESSION:
+ s.substring(0, s.length - 1)
+
+PROPERTY:
+ val list = ss.split(Regex("""[+\- ]"""))
+
+DOT_QUALIFIED_EXPRESSION:
+ ss.split(Regex("""[+\- ]"""))
+
+PROPERTY:
+ val symbol = ss.replace(Regex("""[\d.i]+"""), "")
+
+DOT_QUALIFIED_EXPRESSION:
+ ss.replace(Regex("""[\d.i]+"""), "")
+
+PROPERTY:
+ var real = 0.0
+
+FLOAT_CONSTANT:
+ 0.0
+
+PROPERTY:
+ var imaginate = 0.0
+
+FLOAT_CONSTANT:
+ 0.0
+
+IF:
+ if (symbol.length == 1) {
+        real = list[0].toDouble()
+        imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+    } else {
+        real = list[1].toDouble() * -1
+        imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
+    }
+
+BLOCK:
+ {
+        real = list[0].toDouble()
+        imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+    }
+
+BINARY_EXPRESSION:
+ real = list[0].toDouble()
+
+BINARY_EXPRESSION:
+ imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+
+RETURN:
+ return Complex(real, imaginate)
+
+CLASS:
+ class Complex(val re: Double, val im: Double) {
+    /**
+     * Конструктор из вещественного числа
+     */
+    constructor(x: Double) : this(re = x, im = 0.0)
+
+    /**
+     * Конструктор из строки вида x+yi
+     */
+    //constructor(s: String) : this(re = abc(s)[0], im = abc(s)[1])
+
+    /**
+     * Сложение.
+     */
+    operator fun plus(other: Complex): Complex = Complex(re + other.re, im + other.im)
+
+    /**
+     * Смена знака (у обеих частей числа)
+     */
+    operator fun unaryMinus(): Complex = Complex(-re, -im)
+
+    /**
+     * Вычитание
+     */
+    operator fun minus(other: Complex): Complex = Complex(re - other.re, im - other.im)
+
+    /**
+     * Умножение
+     */
+    operator fun times(other: Complex): Complex =
+        Complex(re * other.re + im * other.im * -1, re * other.im + im * other.re)
+
+    /**
+     * Деление
+     */
+    operator fun div(other: Complex): Complex {
+        val real = (re * other.re + im * other.im) / (other.re * other.re + other.im * other.im)
+        val imaginate = (im * other.re - re * other.im) / (other.re * other.re + other.im * other.im)
+        return Complex(real, imaginate)
+    }
+
+    /**
+     * Сравнение на равенство
+     */
+    override fun equals(other: Any?): Boolean {
+        if (other is Complex)
+            return other.re == re && other.im == im
+        return false
+    }
+
+    /**
+     * Преобразование в строку
+     */
+    override fun toString(): String =
+        when {
+            re == 0.0 && im != 0.0 -> "${im}i"
+            im == 0.0 && re != 0.0 -> "$re"
+            im == 1.0 -> "$re+i"
+            im == -1.0 -> "$re-i"
+            im > 0.0 -> "$re+${im}i"
+            im < 0.0 -> "$re${im}i"
+            else -> "0.0"
+        }
+}
+
+CLASS_BODY:
+ {
+    /**
+     * Конструктор из вещественного числа
+     */
+    constructor(x: Double) : this(re = x, im = 0.0)
+
+    /**
+     * Конструктор из строки вида x+yi
+     */
+    //constructor(s: String) : this(re = abc(s)[0], im = abc(s)[1])
+
+    /**
+     * Сложение.
+     */
+    operator fun plus(other: Complex): Complex = Complex(re + other.re, im + other.im)
+
+    /**
+     * Смена знака (у обеих частей числа)
+     */
+    operator fun unaryMinus(): Complex = Complex(-re, -im)
+
+    /**
+     * Вычитание
+     */
+    operator fun minus(other: Complex): Complex = Complex(re - other.re, im - other.im)
+
+    /**
+     * Умножение
+     */
+    operator fun times(other: Complex): Complex =
+        Complex(re * other.re + im * other.im * -1, re * other.im + im * other.re)
+
+    /**
+     * Деление
+     */
+    operator fun div(other: Complex): Complex {
+        val real = (re * other.re + im * other.im) / (other.re * other.re + other.im * other.im)
+        val imaginate = (im * other.re - re * other.im) / (other.re * other.re + other.im * other.im)
+        return Complex(real, imaginate)
+    }
+
+    /**
+     * Сравнение на равенство
+     */
+    override fun equals(other: Any?): Boolean {
+        if (other is Complex)
+            return other.re == re && other.im == im
+        return false
+    }
+
+    /**
+     * Преобразование в строку
+     */
+    override fun toString(): String =
+        when {
+            re == 0.0 && im != 0.0 -> "${im}i"
+            im == 0.0 && re != 0.0 -> "$re"
+            im == 1.0 -> "$re+i"
+            im == -1.0 -> "$re-i"
+            im > 0.0 -> "$re+${im}i"
+            im < 0.0 -> "$re${im}i"
+            else -> "0.0"
+        }
+}
+
+FUN:
+ /**
+     * Сложение.
+     */
+    operator fun plus(other: Complex): Complex = Complex(re + other.re, im + other.im)
+
+CALL_EXPRESSION:
+ Complex(re + other.re, im + other.im)
+
+FUN:
+ /**
+     * Смена знака (у обеих частей числа)
+     */
+    operator fun unaryMinus(): Complex = Complex(-re, -im)
+
+CALL_EXPRESSION:
+ Complex(-re, -im)
+
+
+==========ELEMENTS TO DELETE==========
+
+BLOCK:
+ {
+        real = list[1].toDouble() * -1
+        imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
+    }
+
+PsiElement(else):
+ else
+
+SECONDARY_CONSTRUCTOR:
+ /**
+     * Конструктор из вещественного числа
+     */
+    constructor(x: Double) : this(re = x, im = 0.0)
+
+FUN:
+ /**
+     * Вычитание
+     */
+    operator fun minus(other: Complex): Complex = Complex(re - other.re, im - other.im)
+
+FUN:
+ /**
+     * Умножение
+     */
+    operator fun times(other: Complex): Complex =
+        Complex(re * other.re + im * other.im * -1, re * other.im + im * other.re)
+
+FUN:
+ /**
+     * Деление
+     */
+    operator fun div(other: Complex): Complex {
+        val real = (re * other.re + im * other.im) / (other.re * other.re + other.im * other.im)
+        val imaginate = (im * other.re - re * other.im) / (other.re * other.re + other.im * other.im)
+        return Complex(real, imaginate)
+    }
+
+FUN:
+ /**
+     * Сравнение на равенство
+     */
+    override fun equals(other: Any?): Boolean {
+        if (other is Complex)
+            return other.re == re && other.im == im
+        return false
+    }
+
+FUN:
+ /**
+     * Преобразование в строку
+     */
+    override fun toString(): String =
+        when {
+            re == 0.0 && im != 0.0 -> "${im}i"
+            im == 0.0 && re != 0.0 -> "$re"
+            im == 1.0 -> "$re+i"
+            im == -1.0 -> "$re-i"
+            im > 0.0 -> "$re+${im}i"
+            im < 0.0 -> "$re${im}i"
+            else -> "0.0"
+        }
+

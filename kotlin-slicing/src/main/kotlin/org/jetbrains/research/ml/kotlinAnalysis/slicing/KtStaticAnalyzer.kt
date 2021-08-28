@@ -161,7 +161,6 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
         }
 
         // conditions from control-statements
-        // TODO: Research FOR and WHILE behaviour
         private fun getControlDependencies(element: KtElement): Set<KtElement> {
             var current = element
             val controlDependencies = mutableSetOf<KtElement>()
@@ -185,7 +184,7 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
                         sliceElements.add(current)
                         controlDependencies.add(current.loopRange ?: continue)
                     }
-                    is KtWhileExpressionBase -> {
+                    is KtWhileExpressionBase -> { // While + DoWhile
                         sliceElements.add(current)
                         controlDependencies.add(current.condition ?: continue)
                     }

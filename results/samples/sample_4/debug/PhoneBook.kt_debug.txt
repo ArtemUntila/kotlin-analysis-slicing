@@ -1,0 +1,868 @@
+LINE NUMBERS: [3, 4, 14, 15, 16, 41, 42, 43, 44, 45, 46, 57, 58, 61, 79]
+
+LINE NUMBERS AFTER STATIC ANALYSIS: [3, 4, 14, 15, 16, 41, 42, 43, 44, 45, 46, 57, 58, 61, 79]
+
+PACKAGE_DIRECTIVE: i = 1   class = class org.jetbrains.kotlin.psi.KtPackageDirective (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+IMPORT_LIST: i = 1   class = class org.jetbrains.kotlin.psi.KtImportList (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+CLASS: i = 1   class = class org.jetbrains.kotlin.psi.KtClass (Kotlin reflection is not available)    text:
+class PhoneBook {
+
+    private val book = mutableMapOf<String, MutableSet<String>>()
+    private val phones = mutableMapOf<String, String>()
+
+    /**
+     * Добавить человека.
+     * Возвращает true, если человек был успешно добавлен,
+     * и false, если человек с таким именем уже был в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun addHuman(name: String): Boolean {
+        if (book.containsKey(name)) return false
+        book[name] = mutableSetOf()
+        return true
+    }
+
+    /**
+     * Убрать человека.
+     * Возвращает true, если человек был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun removeHuman(name: String): Boolean {
+        if (!book.containsKey(name)) return false
+        book.remove(name)
+        return true
+    }
+
+    /**
+     * Добавить номер телефона.
+     * Возвращает true, если номер был успешно добавлен,
+     * и false, если человек с таким именем отсутствовал в телефонной книге,
+     * либо у него уже был такой номер телефона,
+     * либо такой номер телефона зарегистрирован за другим человеком.
+     */
+
+    fun addPhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        for ((n, p) in book)
+            if (p.contains(phone)) return false
+        book[name]!!.add(phone)
+        phones[phone] = name
+        return true
+    }
+
+    /**
+     * Убрать номер телефона.
+     * Возвращает true, если номер был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * либо у него не было такого номера телефона.
+     */
+
+    fun removePhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        if (!book[name]!!.contains(phone)) return false
+        book[name]!!.remove(phone)
+        phones.remove(phone, name)
+        return true
+    }
+
+    /**
+     * Вернуть все номера телефона заданного человека.
+     * Если этого человека нет в книге, вернуть пустой список
+     */
+
+    fun phones(name: String): Set<String> {
+        if (!book.containsKey(name)) return emptySet()
+        return book[name]!!
+    }
+
+    /**
+     * Вернуть имя человека по заданному номеру телефона.
+     * Если такого номера нет в книге, вернуть null.
+     */
+
+    fun humanByPhone(phone: String): String? = phones[phone]
+
+    /**
+     * Две телефонные книги равны, если в них хранится одинаковый набор людей,
+     * и каждому человеку соответствует одинаковый набор телефонов.
+     * Порядок людей / порядок телефонов в книге не должен иметь значения.
+     */
+
+    override fun equals(other: Any?): Boolean = (other is PhoneBook && other.book == book)
+
+    override fun hashCode(): Int {
+        return book.hashCode()
+    }
+
+}
+
+ADD: CONTAINER
+
+CLASS_BODY: i = 1   class = class org.jetbrains.kotlin.psi.KtClassBody (Kotlin reflection is not available)    text:
+{
+
+    private val book = mutableMapOf<String, MutableSet<String>>()
+    private val phones = mutableMapOf<String, String>()
+
+    /**
+     * Добавить человека.
+     * Возвращает true, если человек был успешно добавлен,
+     * и false, если человек с таким именем уже был в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun addHuman(name: String): Boolean {
+        if (book.containsKey(name)) return false
+        book[name] = mutableSetOf()
+        return true
+    }
+
+    /**
+     * Убрать человека.
+     * Возвращает true, если человек был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun removeHuman(name: String): Boolean {
+        if (!book.containsKey(name)) return false
+        book.remove(name)
+        return true
+    }
+
+    /**
+     * Добавить номер телефона.
+     * Возвращает true, если номер был успешно добавлен,
+     * и false, если человек с таким именем отсутствовал в телефонной книге,
+     * либо у него уже был такой номер телефона,
+     * либо такой номер телефона зарегистрирован за другим человеком.
+     */
+
+    fun addPhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        for ((n, p) in book)
+            if (p.contains(phone)) return false
+        book[name]!!.add(phone)
+        phones[phone] = name
+        return true
+    }
+
+    /**
+     * Убрать номер телефона.
+     * Возвращает true, если номер был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * либо у него не было такого номера телефона.
+     */
+
+    fun removePhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        if (!book[name]!!.contains(phone)) return false
+        book[name]!!.remove(phone)
+        phones.remove(phone, name)
+        return true
+    }
+
+    /**
+     * Вернуть все номера телефона заданного человека.
+     * Если этого человека нет в книге, вернуть пустой список
+     */
+
+    fun phones(name: String): Set<String> {
+        if (!book.containsKey(name)) return emptySet()
+        return book[name]!!
+    }
+
+    /**
+     * Вернуть имя человека по заданному номеру телефона.
+     * Если такого номера нет в книге, вернуть null.
+     */
+
+    fun humanByPhone(phone: String): String? = phones[phone]
+
+    /**
+     * Две телефонные книги равны, если в них хранится одинаковый набор людей,
+     * и каждому человеку соответствует одинаковый набор телефонов.
+     * Порядок людей / порядок телефонов в книге не должен иметь значения.
+     */
+
+    override fun equals(other: Any?): Boolean = (other is PhoneBook && other.book == book)
+
+    override fun hashCode(): Int {
+        return book.hashCode()
+    }
+
+}
+
+ADD: CONTAINER
+
+PROPERTY: i = 3   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+private val book = mutableMapOf<String, MutableSet<String>>()
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 3   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+mutableMapOf<String, MutableSet<String>>()
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 4   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+private val phones = mutableMapOf<String, String>()
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 4   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+mutableMapOf<String, String>()
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 13   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Добавить человека.
+     * Возвращает true, если человек был успешно добавлен,
+     * и false, если человек с таким именем уже был в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun addHuman(name: String): Boolean {
+        if (book.containsKey(name)) return false
+        book[name] = mutableSetOf()
+        return true
+    }
+
+ADD: CONTAINER
+
+BLOCK: i = 13   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        if (book.containsKey(name)) return false
+        book[name] = mutableSetOf()
+        return true
+    }
+
+ADD: CONTAINER
+
+IF: i = 14   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (book.containsKey(name)) return false
+
+ADD: SLICE_ELEMENT
+
+RETURN: i = 14   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return false
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 15   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+book[name] = mutableSetOf()
+
+ADD: SLICE_ELEMENT
+
+RETURN: i = 16   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return true
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 26   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Убрать человека.
+     * Возвращает true, если человек был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun removeHuman(name: String): Boolean {
+        if (!book.containsKey(name)) return false
+        book.remove(name)
+        return true
+    }
+
+SKIP
+
+FUN: i = 40   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Добавить номер телефона.
+     * Возвращает true, если номер был успешно добавлен,
+     * и false, если человек с таким именем отсутствовал в телефонной книге,
+     * либо у него уже был такой номер телефона,
+     * либо такой номер телефона зарегистрирован за другим человеком.
+     */
+
+    fun addPhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        for ((n, p) in book)
+            if (p.contains(phone)) return false
+        book[name]!!.add(phone)
+        phones[phone] = name
+        return true
+    }
+
+ADD: CONTAINER
+
+BLOCK: i = 40   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        if (!book.containsKey(name)) return false
+        for ((n, p) in book)
+            if (p.contains(phone)) return false
+        book[name]!!.add(phone)
+        phones[phone] = name
+        return true
+    }
+
+ADD: CONTAINER
+
+IF: i = 41   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (!book.containsKey(name)) return false
+
+ADD: SLICE_ELEMENT
+
+RETURN: i = 41   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return false
+
+ADD: SLICE_ELEMENT
+
+FOR: i = 42   class = class org.jetbrains.kotlin.psi.KtForExpression (Kotlin reflection is not available)    text:
+for ((n, p) in book)
+            if (p.contains(phone)) return false
+
+ADD: SLICE_ELEMENT
+
+IF: i = 43   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (p.contains(phone)) return false
+
+ADD: SLICE_ELEMENT
+
+RETURN: i = 43   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return false
+
+ADD: SLICE_ELEMENT
+
+DOT_QUALIFIED_EXPRESSION: i = 44   class = class org.jetbrains.kotlin.psi.KtDotQualifiedExpression (Kotlin reflection is not available)    text:
+book[name]!!.add(phone)
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 45   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+phones[phone] = name
+
+ADD: SLICE_ELEMENT
+
+RETURN: i = 46   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return true
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 56   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Убрать номер телефона.
+     * Возвращает true, если номер был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * либо у него не было такого номера телефона.
+     */
+
+    fun removePhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        if (!book[name]!!.contains(phone)) return false
+        book[name]!!.remove(phone)
+        phones.remove(phone, name)
+        return true
+    }
+
+ADD: CONTAINER
+
+BLOCK: i = 56   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        if (!book.containsKey(name)) return false
+        if (!book[name]!!.contains(phone)) return false
+        book[name]!!.remove(phone)
+        phones.remove(phone, name)
+        return true
+    }
+
+ADD: CONTAINER
+
+IF: i = 57   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (!book.containsKey(name)) return false
+
+ADD: SLICE_ELEMENT
+
+RETURN: i = 57   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return false
+
+ADD: SLICE_ELEMENT
+
+IF: i = 58   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (!book[name]!!.contains(phone)) return false
+
+ADD: SLICE_ELEMENT
+
+RETURN: i = 58   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return false
+
+ADD: SLICE_ELEMENT
+
+DOT_QUALIFIED_EXPRESSION: i = 59   class = class org.jetbrains.kotlin.psi.KtDotQualifiedExpression (Kotlin reflection is not available)    text:
+book[name]!!.remove(phone)
+
+SKIP
+
+DOT_QUALIFIED_EXPRESSION: i = 60   class = class org.jetbrains.kotlin.psi.KtDotQualifiedExpression (Kotlin reflection is not available)    text:
+phones.remove(phone, name)
+
+SKIP
+
+RETURN: i = 61   class = class org.jetbrains.kotlin.psi.KtReturnExpression (Kotlin reflection is not available)    text:
+return true
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 69   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Вернуть все номера телефона заданного человека.
+     * Если этого человека нет в книге, вернуть пустой список
+     */
+
+    fun phones(name: String): Set<String> {
+        if (!book.containsKey(name)) return emptySet()
+        return book[name]!!
+    }
+
+SKIP
+
+FUN: i = 79   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Вернуть имя человека по заданному номеру телефона.
+     * Если такого номера нет в книге, вернуть null.
+     */
+
+    fun humanByPhone(phone: String): String? = phones[phone]
+
+ADD: SLICE_ELEMENT
+
+ARRAY_ACCESS_EXPRESSION: i = 79   class = class org.jetbrains.kotlin.psi.KtArrayAccessExpression (Kotlin reflection is not available)    text:
+phones[phone]
+
+ADD: SLICE_ELEMENT
+
+FUN: i = 87   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+/**
+     * Две телефонные книги равны, если в них хранится одинаковый набор людей,
+     * и каждому человеку соответствует одинаковый набор телефонов.
+     * Порядок людей / порядок телефонов в книге не должен иметь значения.
+     */
+
+    override fun equals(other: Any?): Boolean = (other is PhoneBook && other.book == book)
+
+SKIP
+
+FUN: i = 89   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+override fun hashCode(): Int {
+        return book.hashCode()
+    }
+
+SKIP
+
+
+==========SLICE ELEMENTS==========
+
+PACKAGE_DIRECTIVE:
+ 
+
+IMPORT_LIST:
+ 
+
+CLASS:
+ class PhoneBook {
+
+    private val book = mutableMapOf<String, MutableSet<String>>()
+    private val phones = mutableMapOf<String, String>()
+
+    /**
+     * Добавить человека.
+     * Возвращает true, если человек был успешно добавлен,
+     * и false, если человек с таким именем уже был в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun addHuman(name: String): Boolean {
+        if (book.containsKey(name)) return false
+        book[name] = mutableSetOf()
+        return true
+    }
+
+    /**
+     * Убрать человека.
+     * Возвращает true, если человек был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun removeHuman(name: String): Boolean {
+        if (!book.containsKey(name)) return false
+        book.remove(name)
+        return true
+    }
+
+    /**
+     * Добавить номер телефона.
+     * Возвращает true, если номер был успешно добавлен,
+     * и false, если человек с таким именем отсутствовал в телефонной книге,
+     * либо у него уже был такой номер телефона,
+     * либо такой номер телефона зарегистрирован за другим человеком.
+     */
+
+    fun addPhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        for ((n, p) in book)
+            if (p.contains(phone)) return false
+        book[name]!!.add(phone)
+        phones[phone] = name
+        return true
+    }
+
+    /**
+     * Убрать номер телефона.
+     * Возвращает true, если номер был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * либо у него не было такого номера телефона.
+     */
+
+    fun removePhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        if (!book[name]!!.contains(phone)) return false
+        book[name]!!.remove(phone)
+        phones.remove(phone, name)
+        return true
+    }
+
+    /**
+     * Вернуть все номера телефона заданного человека.
+     * Если этого человека нет в книге, вернуть пустой список
+     */
+
+    fun phones(name: String): Set<String> {
+        if (!book.containsKey(name)) return emptySet()
+        return book[name]!!
+    }
+
+    /**
+     * Вернуть имя человека по заданному номеру телефона.
+     * Если такого номера нет в книге, вернуть null.
+     */
+
+    fun humanByPhone(phone: String): String? = phones[phone]
+
+    /**
+     * Две телефонные книги равны, если в них хранится одинаковый набор людей,
+     * и каждому человеку соответствует одинаковый набор телефонов.
+     * Порядок людей / порядок телефонов в книге не должен иметь значения.
+     */
+
+    override fun equals(other: Any?): Boolean = (other is PhoneBook && other.book == book)
+
+    override fun hashCode(): Int {
+        return book.hashCode()
+    }
+
+}
+
+CLASS_BODY:
+ {
+
+    private val book = mutableMapOf<String, MutableSet<String>>()
+    private val phones = mutableMapOf<String, String>()
+
+    /**
+     * Добавить человека.
+     * Возвращает true, если человек был успешно добавлен,
+     * и false, если человек с таким именем уже был в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun addHuman(name: String): Boolean {
+        if (book.containsKey(name)) return false
+        book[name] = mutableSetOf()
+        return true
+    }
+
+    /**
+     * Убрать человека.
+     * Возвращает true, если человек был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun removeHuman(name: String): Boolean {
+        if (!book.containsKey(name)) return false
+        book.remove(name)
+        return true
+    }
+
+    /**
+     * Добавить номер телефона.
+     * Возвращает true, если номер был успешно добавлен,
+     * и false, если человек с таким именем отсутствовал в телефонной книге,
+     * либо у него уже был такой номер телефона,
+     * либо такой номер телефона зарегистрирован за другим человеком.
+     */
+
+    fun addPhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        for ((n, p) in book)
+            if (p.contains(phone)) return false
+        book[name]!!.add(phone)
+        phones[phone] = name
+        return true
+    }
+
+    /**
+     * Убрать номер телефона.
+     * Возвращает true, если номер был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * либо у него не было такого номера телефона.
+     */
+
+    fun removePhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        if (!book[name]!!.contains(phone)) return false
+        book[name]!!.remove(phone)
+        phones.remove(phone, name)
+        return true
+    }
+
+    /**
+     * Вернуть все номера телефона заданного человека.
+     * Если этого человека нет в книге, вернуть пустой список
+     */
+
+    fun phones(name: String): Set<String> {
+        if (!book.containsKey(name)) return emptySet()
+        return book[name]!!
+    }
+
+    /**
+     * Вернуть имя человека по заданному номеру телефона.
+     * Если такого номера нет в книге, вернуть null.
+     */
+
+    fun humanByPhone(phone: String): String? = phones[phone]
+
+    /**
+     * Две телефонные книги равны, если в них хранится одинаковый набор людей,
+     * и каждому человеку соответствует одинаковый набор телефонов.
+     * Порядок людей / порядок телефонов в книге не должен иметь значения.
+     */
+
+    override fun equals(other: Any?): Boolean = (other is PhoneBook && other.book == book)
+
+    override fun hashCode(): Int {
+        return book.hashCode()
+    }
+
+}
+
+PROPERTY:
+ private val book = mutableMapOf<String, MutableSet<String>>()
+
+CALL_EXPRESSION:
+ mutableMapOf<String, MutableSet<String>>()
+
+PROPERTY:
+ private val phones = mutableMapOf<String, String>()
+
+CALL_EXPRESSION:
+ mutableMapOf<String, String>()
+
+FUN:
+ /**
+     * Добавить человека.
+     * Возвращает true, если человек был успешно добавлен,
+     * и false, если человек с таким именем уже был в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun addHuman(name: String): Boolean {
+        if (book.containsKey(name)) return false
+        book[name] = mutableSetOf()
+        return true
+    }
+
+BLOCK:
+ {
+        if (book.containsKey(name)) return false
+        book[name] = mutableSetOf()
+        return true
+    }
+
+IF:
+ if (book.containsKey(name)) return false
+
+RETURN:
+ return false
+
+BINARY_EXPRESSION:
+ book[name] = mutableSetOf()
+
+RETURN:
+ return true
+
+FUN:
+ /**
+     * Добавить номер телефона.
+     * Возвращает true, если номер был успешно добавлен,
+     * и false, если человек с таким именем отсутствовал в телефонной книге,
+     * либо у него уже был такой номер телефона,
+     * либо такой номер телефона зарегистрирован за другим человеком.
+     */
+
+    fun addPhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        for ((n, p) in book)
+            if (p.contains(phone)) return false
+        book[name]!!.add(phone)
+        phones[phone] = name
+        return true
+    }
+
+BLOCK:
+ {
+        if (!book.containsKey(name)) return false
+        for ((n, p) in book)
+            if (p.contains(phone)) return false
+        book[name]!!.add(phone)
+        phones[phone] = name
+        return true
+    }
+
+IF:
+ if (!book.containsKey(name)) return false
+
+RETURN:
+ return false
+
+FOR:
+ for ((n, p) in book)
+            if (p.contains(phone)) return false
+
+IF:
+ if (p.contains(phone)) return false
+
+RETURN:
+ return false
+
+DOT_QUALIFIED_EXPRESSION:
+ book[name]!!.add(phone)
+
+BINARY_EXPRESSION:
+ phones[phone] = name
+
+RETURN:
+ return true
+
+FUN:
+ /**
+     * Убрать номер телефона.
+     * Возвращает true, если номер был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * либо у него не было такого номера телефона.
+     */
+
+    fun removePhone(name: String, phone: String): Boolean {
+        if (!book.containsKey(name)) return false
+        if (!book[name]!!.contains(phone)) return false
+        book[name]!!.remove(phone)
+        phones.remove(phone, name)
+        return true
+    }
+
+BLOCK:
+ {
+        if (!book.containsKey(name)) return false
+        if (!book[name]!!.contains(phone)) return false
+        book[name]!!.remove(phone)
+        phones.remove(phone, name)
+        return true
+    }
+
+IF:
+ if (!book.containsKey(name)) return false
+
+RETURN:
+ return false
+
+IF:
+ if (!book[name]!!.contains(phone)) return false
+
+RETURN:
+ return false
+
+RETURN:
+ return true
+
+FUN:
+ /**
+     * Вернуть имя человека по заданному номеру телефона.
+     * Если такого номера нет в книге, вернуть null.
+     */
+
+    fun humanByPhone(phone: String): String? = phones[phone]
+
+ARRAY_ACCESS_EXPRESSION:
+ phones[phone]
+
+
+==========ELEMENTS TO DELETE==========
+
+FUN:
+ /**
+     * Убрать человека.
+     * Возвращает true, если человек был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+
+    fun removeHuman(name: String): Boolean {
+        if (!book.containsKey(name)) return false
+        book.remove(name)
+        return true
+    }
+
+DOT_QUALIFIED_EXPRESSION:
+ book[name]!!.remove(phone)
+
+DOT_QUALIFIED_EXPRESSION:
+ phones.remove(phone, name)
+
+FUN:
+ /**
+     * Вернуть все номера телефона заданного человека.
+     * Если этого человека нет в книге, вернуть пустой список
+     */
+
+    fun phones(name: String): Set<String> {
+        if (!book.containsKey(name)) return emptySet()
+        return book[name]!!
+    }
+
+FUN:
+ /**
+     * Две телефонные книги равны, если в них хранится одинаковый набор людей,
+     * и каждому человеку соответствует одинаковый набор телефонов.
+     * Порядок людей / порядок телефонов в книге не должен иметь значения.
+     */
+
+    override fun equals(other: Any?): Boolean = (other is PhoneBook && other.book == book)
+
+FUN:
+ override fun hashCode(): Int {
+        return book.hashCode()
+    }
+
