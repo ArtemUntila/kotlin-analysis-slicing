@@ -1,0 +1,53 @@
+PROCESSING PROPERTY: val zero = "zero"
+SKIPPED = true
+USED = false
+
+PROCESSING ELEMENT: 6. "even"
+DATA DEPENDENCIES: []
+CONTROL DEPENDENCIES: [x % 2 == 0]
+NOT PROCESSED DEPENDENCIES: [x % 2 == 0]
+
+PROCESSING ELEMENT: 5. x % 2 == 0
+DATA DEPENDENCIES: [val x = readLine()!!.toInt()]
+CONTROL DEPENDENCIES: [x % 2 == 0]
+NOT PROCESSED DEPENDENCIES: []
+
+PROCESSING ELEMENT: 8. "not even"
+DATA DEPENDENCIES: []
+CONTROL DEPENDENCIES: [x % 2 == 0]
+NOT PROCESSED DEPENDENCIES: []
+
+PROCESSING PROPERTY: val result: String
+SKIPPED = true
+USED = true
+
+SEARCHING INITIALIZERS
+
+PROCESSING ELEMENT: 15. result = zero
+DATA DEPENDENCIES: [val result: String, val zero = "zero"]
+CONTROL DEPENDENCIES: [x != 0]
+NOT PROCESSED DEPENDENCIES: [val zero = "zero", x != 0]
+
+PROCESSING PROPERTY: val zero = "zero"
+SKIPPED = true
+USED = true
+
+PROCESSING ELEMENT: 3. "zero"
+DATA DEPENDENCIES: []
+CONTROL DEPENDENCIES: []
+NOT PROCESSED DEPENDENCIES: []
+
+PROCESSING ELEMENT: 12. x != 0
+DATA DEPENDENCIES: [val x = readLine()!!.toInt()]
+CONTROL DEPENDENCIES: [x != 0]
+NOT PROCESSED DEPENDENCIES: []
+
+PROCESSING ELEMENT: 13. result = evenOrNot
+DATA DEPENDENCIES: [val result: String, val evenOrNot = if (x % 2 == 0) {
+        "even"
+    } else {
+        "not even"
+    }]
+CONTROL DEPENDENCIES: [x != 0]
+NOT PROCESSED DEPENDENCIES: []
+

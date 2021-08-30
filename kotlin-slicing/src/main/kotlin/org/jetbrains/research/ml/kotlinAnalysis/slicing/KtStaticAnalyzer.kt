@@ -21,11 +21,10 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
                        override val document: Document,
                        override val outputDir: Path) : Slicer {
 
+    /**Elements included during static analysis*/
     override val sliceElements = mutableSetOf<KtElement>()
 
     private val staticLineNumbers = mutableSetOf<Int>()
-
-    fun getStaticLineNumbers() = staticLineNumbers.sorted()
 
     override val debugWriter: PrintWriter = getPrintWriter(outputDir, "${name}_static_debug.txt")
 
@@ -33,6 +32,8 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
         psiFile.accept(KtStaticAnalysisPreprocessor())
         debugWriter.flush()
     }
+
+    fun getStaticLineNumbers() = staticLineNumbers.sorted()
 
     private inner class KtStaticAnalysisPreprocessor : KtConditionalVisitor() {
 
@@ -42,27 +43,29 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
         override fun visitProperty(property: KtProperty) {
             if (property.containsSliceElement()) {
                 sliceElements.add(property)
-                processPropertyInitializer(property.delegateExpressionOrInitializer ?: return)
+                processIncludedPropertyInitializer(property.delegateExpressionOrInitializer ?: return)
             } else processSkippedProperty(property)
         }
 
-        private fun processPropertyInitializer(initializer: KtExpression) {
+        private fun processIncludedPropertyInitializer(initializer: KtExpression) {
             when (initializer) {
                 is KtIfExpression -> visitIfExpressionSafely(initializer)
                 is KtWhenExpression -> visitWhenExpressionSafely(initializer)
             }
         }
 
-        /**IF and WHEN as an expressions*/
+        /**IF as an expressions*/
         private fun visitIfExpressionSafely(expression: KtIfExpression) {
             visitExpressionSafely(expression.then)
             visitExpressionSafely(expression.`else`)
         }
 
+        /**WHEN as an expression*/
         private fun visitWhenExpressionSafely(expression: KtWhenExpression) {
             expression.entries.forEach { visitExpressionSafely(it.expression) }
         }
 
+        /**Property initializer expression*/
         private fun visitExpressionSafely(expression: KtExpression?) {
             if (expression == null) return
 
@@ -77,6 +80,10 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
             }
         }
 
+        /**
+         * Processing property, not included in slice.log, but used in sliced lines or used in elements,
+         * included by this static analyzer
+         */
         private fun processSkippedProperty(property: KtProperty) {
             // if the property is included by a dynamic slicer or has already been processed
             debugWriter.println("PROCESSING PROPERTY: ${property.getDebugText()}")
@@ -88,8 +95,6 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
 
             debugWriter.println("true")
 
-            val initializer = property.delegateExpressionOrInitializer
-
             val references = ReferencesSearch.search(property).map { it.element.parent as KtElement }
 
             val used = references.any {
@@ -99,6 +104,8 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
             debugWriter.println("USED = $used\n")
             if (!used) return
             else property.addToStaticSlice()
+
+            val initializer = property.delegateExpressionOrInitializer
 
             if (initializer != null) visitExpressionSafely(initializer)
             else {
@@ -112,6 +119,7 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
             }
         }
 
+        /**Processing element and it's data- and control-dependencies*/
         private fun processElement(element: KtElement) {
             if (element in sliceElements) return // containsSliceElement isn't used because of one-string expressions
 
@@ -135,12 +143,12 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
         // ~ resolved dataDependencies
         private fun getDataDependencies(element: KtElement): Set<KtElement> {
             val references = findNameReferences(element)
-            val resolves = mutableSetOf<KtElement>()
+            val dataDependencies = mutableSetOf<KtElement>()
             for (reference in references) {
                 val resolve = reference.resolve() as? KtElement ?: continue
-                resolves.add(resolve)
+                dataDependencies.add(resolve)
             }
-            return resolves
+            return dataDependencies
         }
 
         // ~ used dataDependencies
@@ -160,13 +168,14 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
             return references
         }
 
-        // conditions from control-statements
+        // conditions from control-expressions
         private fun getControlDependencies(element: KtElement): Set<KtElement> {
             var current = element
             val controlDependencies = mutableSetOf<KtElement>()
+
             while (current !is KtNamedFunction && current !is KtClassOrObject) {
                 current = (current as PsiElement).parent as KtElement
-                // if (parent !in sliceElements) {
+
                 when (current) {
                     is KtIfExpression -> {
                         sliceElements.add(current)
@@ -189,8 +198,8 @@ class KtStaticAnalyzer(override val psiFile: PsiFile,
                         controlDependencies.add(current.condition ?: continue)
                     }
                 }
-                // }
             }
+
             return controlDependencies
         }
 

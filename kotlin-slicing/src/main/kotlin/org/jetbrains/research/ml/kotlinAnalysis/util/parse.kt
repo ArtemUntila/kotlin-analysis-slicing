@@ -14,7 +14,7 @@ fun parse(path: Path): MutableMap<String, MutableSet<Int>> {
     return slices
 }
 
-fun unpackSlices(lineNumbers: Set<Int>, lines: List<String>): MutableMap<Int, String> { // unnecessary
+fun unpackSlices(lineNumbers: Set<Int>, lines: List<String>): MutableMap<Int, String> { // debug
     val result = mutableMapOf<Int, String>()
     for (i in lines.indices) if (lineNumbers.contains(i + 1)) {
         result[i + 1] = lines[i]

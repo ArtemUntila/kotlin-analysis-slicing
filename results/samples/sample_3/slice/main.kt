@@ -1,30 +1,20 @@
-fun main(){
-    val x = readLine()!!.toInt() // 1 !!!
-    val y: Int
-    val z: Int
-    val w: Int
-    if (x > 0) { // !!!
-        y = 1
-        z = 1 // !!!
-        w = 1
-    } else if (x == 0) {
-        y = x + 2
-        z = x - 2
-        w = x * 2
-    } else {
-        y = x + 3
-        z = x - 3
-        w = x * 3
-    }
+fun main() {
+    val a = Complex(2.2, 2.1)
+    val b = -Complex("3.2+1.1i")
+    val c = a + b
 
-    val t = if (z == 1) { // !!!
-            "z"
-        } else if (w == 1) {
-            str(y)
-        } else "a"
+    val pb = PhoneBook()
+    val artyom = "Artyom"
+    val number1 = "+7 978 888 88 88"
+    pb.addHuman(artyom)
+    pb.addPhone(artyom, number1)
+    pb.addPhone(artyom, "+7 981 111 11 11")
 
-    println(t) // !!!
-    }
+    val alexander = "Alexander"
+    pb.addHuman(alexander)
 
-fun str(i: Int) =
-    "$i"
+    pb.removePhone(artyom, number1)
+    pb.addPhone(alexander, number1)
+
+    println("$c\n${pb.humanByPhone(number1)}")
+}

@@ -24,8 +24,7 @@ fun main(){
         } else "a"
 
     println(t) // !!!
-    str(y)
-}
+    }
 
 fun str(i: Int) =
     "$i"

@@ -38,15 +38,10 @@ class SliceFormatter(override val psiFile: PsiFile,
         debugWriter.println("\n==========ELEMENTS TO DELETE==========\n")
         elementsToDelete.forEach { debugWriter.println("$it:\n ${it.text}\n") }
         debugWriter.flush()
+
         CommandProcessor.getInstance().executeCommand(
             null, { elementsToDelete.forEach { it.delete() } }, null, null
         )
-    }
-
-    fun writeSlice() {
-        val sliceWriter = getPrintWriter(outputDir, name)
-        sliceWriter.println(psiFile.text)
-        sliceWriter.flush()
     }
 
     fun getSlicedPsi() = psiFile
@@ -82,7 +77,7 @@ class SliceFormatter(override val psiFile: PsiFile,
             if (analyzeElement(property)) property.delegateExpressionOrInitializer?.accept(this, null)
         }
 
-        /**Functions related to visiting Lambda Expressions*/
+        /**Functions related to visiting and slicing Lambda Expressions*/
         override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
             if (!analyzeElement(expression)) return
             val lambda = expression.callExpression?.singleLambdaArgumentExpression() ?: return

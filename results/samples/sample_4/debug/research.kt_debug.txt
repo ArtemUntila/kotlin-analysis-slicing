@@ -1,0 +1,290 @@
+LINE NUMBERS: [2, 5, 12, 13, 18]
+
+LINE NUMBERS AFTER STATIC ANALYSIS: [2, 3, 5, 6, 8, 11, 12, 13, 15, 18]
+
+PACKAGE_DIRECTIVE: i = 1   class = class org.jetbrains.kotlin.psi.KtPackageDirective (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+IMPORT_LIST: i = 1   class = class org.jetbrains.kotlin.psi.KtImportList (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+FUN: i = 1   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun main() {
+    val x = readLine()!!.toInt()
+    val zero = "zero"
+
+    val evenOrNot = if (x % 2 == 0) {
+        "even"
+    } else {
+        "not even"
+    }
+
+    val result: String
+    if (x != 0) {
+        result = evenOrNot
+    } else {
+        result = zero
+    }
+
+    println(result)
+}
+
+ADD: CONTAINER
+
+BLOCK: i = 1   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+    val x = readLine()!!.toInt()
+    val zero = "zero"
+
+    val evenOrNot = if (x % 2 == 0) {
+        "even"
+    } else {
+        "not even"
+    }
+
+    val result: String
+    if (x != 0) {
+        result = evenOrNot
+    } else {
+        result = zero
+    }
+
+    println(result)
+}
+
+ADD: CONTAINER
+
+PROPERTY: i = 2   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val x = readLine()!!.toInt()
+
+ADD: SLICE_ELEMENT
+
+DOT_QUALIFIED_EXPRESSION: i = 2   class = class org.jetbrains.kotlin.psi.KtDotQualifiedExpression (Kotlin reflection is not available)    text:
+readLine()!!.toInt()
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 3   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val zero = "zero"
+
+ADD: SLICE_ELEMENT
+
+STRING_TEMPLATE: i = 3   class = class org.jetbrains.kotlin.psi.KtStringTemplateExpression (Kotlin reflection is not available)    text:
+"zero"
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 5   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val evenOrNot = if (x % 2 == 0) {
+        "even"
+    } else {
+        "not even"
+    }
+
+ADD: SLICE_ELEMENT
+
+IF: i = 5   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (x % 2 == 0) {
+        "even"
+    } else {
+        "not even"
+    }
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 5   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        "even"
+    }
+
+ADD: SLICE_ELEMENT
+
+STRING_TEMPLATE: i = 6   class = class org.jetbrains.kotlin.psi.KtStringTemplateExpression (Kotlin reflection is not available)    text:
+"even"
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 7   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        "not even"
+    }
+
+ADD: CONTAINER
+
+STRING_TEMPLATE: i = 8   class = class org.jetbrains.kotlin.psi.KtStringTemplateExpression (Kotlin reflection is not available)    text:
+"not even"
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 11   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val result: String
+
+ADD: SLICE_ELEMENT
+
+IF: i = 12   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (x != 0) {
+        result = evenOrNot
+    } else {
+        result = zero
+    }
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 12   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        result = evenOrNot
+    }
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 13   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+result = evenOrNot
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 14   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        result = zero
+    }
+
+ADD: CONTAINER
+
+BINARY_EXPRESSION: i = 15   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+result = zero
+
+ADD: SLICE_ELEMENT
+
+CALL_EXPRESSION: i = 18   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+println(result)
+
+ADD: SLICE_ELEMENT
+
+
+==========SLICE ELEMENTS==========
+
+PACKAGE_DIRECTIVE:
+ 
+
+IMPORT_LIST:
+ 
+
+FUN:
+ fun main() {
+    val x = readLine()!!.toInt()
+    val zero = "zero"
+
+    val evenOrNot = if (x % 2 == 0) {
+        "even"
+    } else {
+        "not even"
+    }
+
+    val result: String
+    if (x != 0) {
+        result = evenOrNot
+    } else {
+        result = zero
+    }
+
+    println(result)
+}
+
+BLOCK:
+ {
+    val x = readLine()!!.toInt()
+    val zero = "zero"
+
+    val evenOrNot = if (x % 2 == 0) {
+        "even"
+    } else {
+        "not even"
+    }
+
+    val result: String
+    if (x != 0) {
+        result = evenOrNot
+    } else {
+        result = zero
+    }
+
+    println(result)
+}
+
+PROPERTY:
+ val x = readLine()!!.toInt()
+
+DOT_QUALIFIED_EXPRESSION:
+ readLine()!!.toInt()
+
+PROPERTY:
+ val zero = "zero"
+
+STRING_TEMPLATE:
+ "zero"
+
+PROPERTY:
+ val evenOrNot = if (x % 2 == 0) {
+        "even"
+    } else {
+        "not even"
+    }
+
+IF:
+ if (x % 2 == 0) {
+        "even"
+    } else {
+        "not even"
+    }
+
+BLOCK:
+ {
+        "even"
+    }
+
+STRING_TEMPLATE:
+ "even"
+
+BLOCK:
+ {
+        "not even"
+    }
+
+STRING_TEMPLATE:
+ "not even"
+
+PROPERTY:
+ val result: String
+
+IF:
+ if (x != 0) {
+        result = evenOrNot
+    } else {
+        result = zero
+    }
+
+BLOCK:
+ {
+        result = evenOrNot
+    }
+
+BINARY_EXPRESSION:
+ result = evenOrNot
+
+BLOCK:
+ {
+        result = zero
+    }
+
+BINARY_EXPRESSION:
+ result = zero
+
+CALL_EXPRESSION:
+ println(result)
+
+
+==========ELEMENTS TO DELETE==========
+

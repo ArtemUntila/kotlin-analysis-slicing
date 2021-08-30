@@ -43,7 +43,7 @@ object PsiProvider {
         }
     }
 
-    fun extractPsiFiles(project: Project): MutableSet<PsiFile> {
+    private fun extractPsiFiles(project: Project): MutableSet<PsiFile> {
         val projectPsiFiles = mutableSetOf<PsiFile>()
         val projectRootManager = ProjectRootManager.getInstance(project)
         val psiManager = PsiManager.getInstance(project)
