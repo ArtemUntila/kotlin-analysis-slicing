@@ -62,13 +62,13 @@ Here we also have to include all assignments to the variable `a`.
 
 ### Processing elements
 
-####Getting element data-dependencies
+#### Getting element data-dependencies
 - Find all name references.
 - Resolve name references: properties, functions, classes.
 - Process properties separately.
 - Process other elements.
 
-####Getting element control-dependencies
+#### Getting element control-dependencies
 - Find all parents with types: `if`, `when`, `for`, `while`/`do while`.
 - Get condition-expressions of these parents.
 - Process these expressions.
