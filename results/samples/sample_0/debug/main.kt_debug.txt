@@ -1,0 +1,278 @@
+LINE NUMBERS: [2, 5, 6, 15]
+
+LINE NUMBERS AFTER STATIC ANALYSIS: [2, 3, 5, 6, 8, 9, 12, 15]
+
+PACKAGE_DIRECTIVE: i = 1   class = class org.jetbrains.kotlin.psi.KtPackageDirective (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+IMPORT_LIST: i = 1   class = class org.jetbrains.kotlin.psi.KtImportList (Kotlin reflection is not available)    text:
+
+
+ADD: ALWAYS_RETAINED_PSI_ELEMENT
+
+FUN: i = 1   class = class org.jetbrains.kotlin.psi.KtNamedFunction (Kotlin reflection is not available)    text:
+fun main() {
+    val x = readLine()!!.toInt()
+    val y: Int
+    val z: Int
+    if (x > 0) {
+        y = 1
+        z = 1
+    } else if (x == 0) {
+        y = x + 2
+        z = x - 2
+    } else {
+        y = x + 3
+        z = x - 3
+    }
+    println(y)
+}
+
+ADD: CONTAINER
+
+BLOCK: i = 1   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+    val x = readLine()!!.toInt()
+    val y: Int
+    val z: Int
+    if (x > 0) {
+        y = 1
+        z = 1
+    } else if (x == 0) {
+        y = x + 2
+        z = x - 2
+    } else {
+        y = x + 3
+        z = x - 3
+    }
+    println(y)
+}
+
+ADD: CONTAINER
+
+PROPERTY: i = 2   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val x = readLine()!!.toInt()
+
+ADD: SLICE_ELEMENT
+
+DOT_QUALIFIED_EXPRESSION: i = 2   class = class org.jetbrains.kotlin.psi.KtDotQualifiedExpression (Kotlin reflection is not available)    text:
+readLine()!!.toInt()
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 3   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val y: Int
+
+ADD: SLICE_ELEMENT
+
+PROPERTY: i = 4   class = class org.jetbrains.kotlin.psi.KtProperty (Kotlin reflection is not available)    text:
+val z: Int
+
+SKIP
+
+IF: i = 5   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (x > 0) {
+        y = 1
+        z = 1
+    } else if (x == 0) {
+        y = x + 2
+        z = x - 2
+    } else {
+        y = x + 3
+        z = x - 3
+    }
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 5   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        y = 1
+        z = 1
+    }
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 6   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+y = 1
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 7   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+z = 1
+
+SKIP
+
+IF: i = 8   class = class org.jetbrains.kotlin.psi.KtIfExpression (Kotlin reflection is not available)    text:
+if (x == 0) {
+        y = x + 2
+        z = x - 2
+    } else {
+        y = x + 3
+        z = x - 3
+    }
+
+ADD: SLICE_ELEMENT
+
+BLOCK: i = 8   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        y = x + 2
+        z = x - 2
+    }
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 9   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+y = x + 2
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 10   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+z = x - 2
+
+SKIP
+
+BLOCK: i = 11   class = class org.jetbrains.kotlin.psi.KtBlockExpression (Kotlin reflection is not available)    text:
+{
+        y = x + 3
+        z = x - 3
+    }
+
+ADD: CONTAINER
+
+BINARY_EXPRESSION: i = 12   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+y = x + 3
+
+ADD: SLICE_ELEMENT
+
+BINARY_EXPRESSION: i = 13   class = class org.jetbrains.kotlin.psi.KtBinaryExpression (Kotlin reflection is not available)    text:
+z = x - 3
+
+SKIP
+
+CALL_EXPRESSION: i = 15   class = class org.jetbrains.kotlin.psi.KtCallExpression (Kotlin reflection is not available)    text:
+println(y)
+
+ADD: SLICE_ELEMENT
+
+
+==========SLICE ELEMENTS==========
+
+PACKAGE_DIRECTIVE:
+ 
+
+IMPORT_LIST:
+ 
+
+FUN:
+ fun main() {
+    val x = readLine()!!.toInt()
+    val y: Int
+    val z: Int
+    if (x > 0) {
+        y = 1
+        z = 1
+    } else if (x == 0) {
+        y = x + 2
+        z = x - 2
+    } else {
+        y = x + 3
+        z = x - 3
+    }
+    println(y)
+}
+
+BLOCK:
+ {
+    val x = readLine()!!.toInt()
+    val y: Int
+    val z: Int
+    if (x > 0) {
+        y = 1
+        z = 1
+    } else if (x == 0) {
+        y = x + 2
+        z = x - 2
+    } else {
+        y = x + 3
+        z = x - 3
+    }
+    println(y)
+}
+
+PROPERTY:
+ val x = readLine()!!.toInt()
+
+DOT_QUALIFIED_EXPRESSION:
+ readLine()!!.toInt()
+
+PROPERTY:
+ val y: Int
+
+IF:
+ if (x > 0) {
+        y = 1
+        z = 1
+    } else if (x == 0) {
+        y = x + 2
+        z = x - 2
+    } else {
+        y = x + 3
+        z = x - 3
+    }
+
+BLOCK:
+ {
+        y = 1
+        z = 1
+    }
+
+BINARY_EXPRESSION:
+ y = 1
+
+IF:
+ if (x == 0) {
+        y = x + 2
+        z = x - 2
+    } else {
+        y = x + 3
+        z = x - 3
+    }
+
+BLOCK:
+ {
+        y = x + 2
+        z = x - 2
+    }
+
+BINARY_EXPRESSION:
+ y = x + 2
+
+BLOCK:
+ {
+        y = x + 3
+        z = x - 3
+    }
+
+BINARY_EXPRESSION:
+ y = x + 3
+
+CALL_EXPRESSION:
+ println(y)
+
+
+==========ELEMENTS TO DELETE==========
+
+PROPERTY:
+ val z: Int
+
+BINARY_EXPRESSION:
+ z = 1
+
+BINARY_EXPRESSION:
+ z = x - 2
+
+BINARY_EXPRESSION:
+ z = x - 3
+
