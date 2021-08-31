@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.kotlinAnalysis.util
+package org.jetbrains.research.kotlinSlicing.util
 
 import com.intellij.openapi.util.Condition
 import org.jetbrains.kotlin.psi.*

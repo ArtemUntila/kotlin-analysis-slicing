@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.kotlinAnalysis.slicing
+package org.jetbrains.research.kotlinSlicing.slicing
 
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.Condition
@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.debugText.getDebugText
 import org.jetbrains.kotlin.psi.psiUtil.asAssignment
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.jetbrains.kotlin.utils.addIfNotNull
-import org.jetbrains.research.ml.kotlinAnalysis.util.KtConditionalVisitor
+import org.jetbrains.research.kotlinSlicing.util.KtConditionalVisitor
 import org.jetbrains.research.ml.kotlinAnalysis.util.getPrintWriter
 import java.io.PrintWriter
 import java.nio.file.Path

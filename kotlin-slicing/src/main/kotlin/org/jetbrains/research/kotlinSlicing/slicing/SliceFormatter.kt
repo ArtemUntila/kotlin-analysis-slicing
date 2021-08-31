@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.kotlinAnalysis.slicing
+package org.jetbrains.research.kotlinSlicing.slicing
 
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Document
@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.idea.intentions.callExpression
 import org.jetbrains.kotlin.idea.intentions.singleLambdaArgumentExpression
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.debugText.getDebugText
-import org.jetbrains.research.ml.kotlinAnalysis.util.KtConditionalVisitor
+import org.jetbrains.research.kotlinSlicing.util.KtConditionalVisitor
 import org.jetbrains.research.ml.kotlinAnalysis.util.getPrintWriter
 import java.nio.file.Path
 

@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.kotlinAnalysis.slicing
+package org.jetbrains.research.kotlinSlicing.slicing
 
 import com.intellij.openapi.editor.Document
 import com.intellij.psi.PsiFile

@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.kotlinAnalysis.util
+package org.jetbrains.research.kotlinSlicing.util
 
 import java.io.File
 import java.nio.file.Path

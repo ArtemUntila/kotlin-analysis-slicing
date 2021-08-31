@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.kotlinAnalysis
+package org.jetbrains.research.kotlinSlicing
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
@@ -6,11 +6,14 @@ import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.debugText.getDebugText
 import org.jetbrains.kotlin.tools.projectWizard.core.asPath
+import org.jetbrains.research.kotlinSlicing.slicing.SliceFormatter
+import org.jetbrains.research.kotlinSlicing.util.parse
+import org.jetbrains.research.kotlinSlicing.util.unpackSlices
+import org.jetbrains.research.ml.kotlinAnalysis.AnalysisExecutor
+import org.jetbrains.research.ml.kotlinAnalysis.PrintWriterResourceManager
+import org.jetbrains.research.ml.kotlinAnalysis.ResourceManager
 import org.jetbrains.research.ml.kotlinAnalysis.psi.PsiProvider
-import org.jetbrains.research.ml.kotlinAnalysis.slicing.SliceFormatter
 import org.jetbrains.research.ml.kotlinAnalysis.util.getPrintWriter
-import org.jetbrains.research.ml.kotlinAnalysis.util.parse
-import org.jetbrains.research.ml.kotlinAnalysis.util.unpackSlices
 import java.nio.file.Path
 
 class SlicingExecutor(private val outputDir: Path, private val slice: Path) : AnalysisExecutor() {

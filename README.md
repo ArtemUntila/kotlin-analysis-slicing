@@ -77,10 +77,10 @@ fun main() {
 }
 ```
 
-The code above will not be compilable, and besides declaration of variable `y` we also have to include all assignments 
-to this variable, because it must be initialized. And this is the reason why we use static analyzer.
+The code above will not be compilable, and besides including the declaration of the variable `y` we also have to include 
+all assignments to this variable, because it must be initialized. And this is the reason why we use static analyzer.
 
-The final sliced and compilable program after static analysis and excluding of truly unused statements:
+The final sliced and compilable program after static analysis:
 
 ```kotlin
 fun main() {

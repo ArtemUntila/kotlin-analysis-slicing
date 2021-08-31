@@ -8,7 +8,8 @@ This module provides functionality related to the whole PSI-analysis, static ana
 Module entry point.
 
 - Extracts .kt files from the input project.
-- Slices the PSI of .kt file, if this file's name is contained in `slice.log` processed by [SourceDecompiler](https://github.com/Artyom-IWT/SourceDecompiler).
+- If this file's name is contained in `slice.log` processed by [SourceDecompiler](https://github.com/Artyom-IWT/SourceDecompiler), 
+executes `SliceFormatter` to get the sliced PSI of this file.
 - Writes output .kt file.
 
 ## `SliceFormatter`
@@ -26,7 +27,7 @@ Main Slicer.
 
 Analyses PSI and includes line numbers with the elements required for the compilability of the output sliced .kt file.
 
-The main analysis-criteria are variables (properties), that were not included in `slice.log` but are used.
+The main analysis-criteria are variables (properties), that were not included in `slice.log`, but are used.
 
 There are 3 main cases:
 
@@ -66,7 +67,7 @@ Here we also have to include all assignments to the variable `a`.
 - Find all name references.
 - Resolve name references: properties, functions, classes.
 - Process properties separately.
-- Process other elements.
+- Process other elements from data-dependencies in the same way.
 
 #### Getting element control-dependencies
 - Find all parents with types: `if`, `when`, `for`, `while`/`do while`.
@@ -94,7 +95,7 @@ val a = if (x == 0) {
   - Property is used in elements, which line numbers are included in`slice.log` or which are included 
   during static analysis:
     - Property has initializer — process initializer.
-    - Property has not initializer — find assignments to this variable and process them as an expressions.
+    - Property has not initializer — find assignments to this variable and process them.
   - Property is not used — skip.
 
 ```kotlin
@@ -111,7 +112,7 @@ if (x != 0) {
 
 If you want to look at the examples of this module's work: [results/samples](https://github.com/Artyom-IWT/kotlin-analysis-slicing/tree/main/results/samples)
 
-You can learn more about the module's internal work using debug files:
+You can learn more about the module's internal work using debug files from samples:
 - `slicing_info.txt` — `SlicingExecutor`
 - `_debug.txt` — `SliceFormatter`.
 - `_static_debug.txt` — `StaticAnalyzer`.

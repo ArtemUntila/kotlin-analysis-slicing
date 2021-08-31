@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.kotlinAnalysis
+package org.jetbrains.research.kotlinSlicing
 
 import com.xenomachina.argparser.ArgParser
 import org.jetbrains.research.pluginUtilities.runners.RunnerArgs
